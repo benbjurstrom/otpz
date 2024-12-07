@@ -3,8 +3,10 @@
 namespace BenBjurstrom\Otpz\Models;
 
 use BenBjurstrom\Otpz\Enums\OtpStatus;
+use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use BenBjurstrom\Otpz\Support\Config;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -38,6 +40,9 @@ class Otp extends Model
         'ip_address',
     ];
 
+    /**
+     * @return BelongsTo<Otpable, Otp>
+     */
     public function user()
     {
         $authenticatableModel = Config::getAuthenticatableModel();

@@ -7,6 +7,8 @@ use BenBjurstrom\Otpz\Http\Controllers\GetLoginController;
 use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
 use BenBjurstrom\Otpz\Http\Controllers\PostLoginController;
 use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
+use BenBjurstrom\Otpz\Mail\OtpzMail;
+use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -24,8 +26,7 @@ class OtpzServiceProvider extends PackageServiceProvider
             ->name('otpz')
             ->hasConfigFile()
             ->hasViews('otpz')
-            ->hasMigration('create_otps_table')
-            ->hasCommand(OtpzCommand::class);
+            ->hasMigration('create_otps_table');
 
         $this->registerOtpzRouteMacro();
     }
@@ -33,15 +34,19 @@ class OtpzServiceProvider extends PackageServiceProvider
     protected function registerOtpzRouteMacro(): self
     {
         Route::macro('otpRoutes', function () {
-            Route::get('login', GetLoginController::class)->name('login');
+            Route::get('otpz/{id}', GetOtpController::class)
+                ->name('otp.show')->middleware('guest');
 
-            Route::post('login', PostLoginController::class)->name('login.post');
+            Route::post('otpz/{id}', PostOtpController::class)
+                ->name('otp.post')->middleware('guest');
 
-            Route::get('login/{id}', GetOtpController::class)
-                ->name('otp.show');
+            if (app()->environment('local')) { // Only for local environment
+                Route::get('/otpz', function () {
+                    $otp = Otp::find(1);
 
-            Route::post('login/{id}', PostOtpController::class)
-                ->name('otp.post');
+                    return new OtpzMail($otp, '12345689');
+                });
+            }
         });
 
         return $this;

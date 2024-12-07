@@ -2,20 +2,25 @@
 
 namespace BenBjurstrom\Otpz\Actions;
 
+use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
+use BenBjurstrom\Otpz\Mail\OtpzMail;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
-use BenBjurstrom\Otpz\Notifications\OtpNotification;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * @method static Otpable run(string $email)
+ *
+ * @throws OtpThrottleException
  */
 class SendOtp
 {
     public function handle(string $email): Otpable
     {
+        $mailable = config('otpz.mailable', OtpzMail::class);
         $user = (new GetUserFromEmail)->handle($email);
+        list($otp, $code) = (new CreateOtp)->handle($user);
 
-        $otp = (new CreateOtp)->handle($user);
-        $user->notify(new OtpNotification($otp));
+        Mail::to($user)->send(new $mailable($otp, $code));
 
         return $user;
     }

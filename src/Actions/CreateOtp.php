@@ -14,8 +14,9 @@ class CreateOtp
 {
     /**
      * @throws OtpThrottleException
+     * @return array<Otp, string>
      */
-    public function handle(Otpable $user): string
+    public function handle(Otpable $user): array
     {
         $this->throttle($user);
 
@@ -30,7 +31,7 @@ class CreateOtp
         foreach ($this->getThresholds() as $threshold) {
             $count = $this->getOtpCount($user, $threshold['minutes']);
 
-            if ($count > $threshold['limit']) {
+            if ($count >= $threshold['limit']) {
                 $remaining = $this->calculateRemainingTime($user, $threshold['minutes']);
                 throw new OtpThrottleException($remaining['minutes'], $remaining['seconds']);
             }
@@ -74,9 +75,12 @@ class CreateOtp
         return ['minutes' => 0, 'seconds' => 0];
     }
 
-    private function createOtp(Otpable $user): string
+    /**
+     * @return array<Otp, string>
+     */
+    private function createOtp(Otpable $user): array
     {
-        // Generate a secure 6-digit OTP code
+        // Generate a secure 9-digit OTP code
         $code = Str::upper(Str::random(9));
 
         // Invalidate existing active OTPs
@@ -85,12 +89,13 @@ class CreateOtp
             ->update(['status' => OtpStatus::SUPERSEDED]);
 
         // Create and save the new OTP
-        $user->otps()->create([
+        $otp = $user->otps()->create([
             'code' => $code,
             'status' => OtpStatus::ACTIVE,
             'ip_address' => request()->ip(),
         ]);
 
-        return $code;
+
+        return [$otp, $code];
     }
 }
