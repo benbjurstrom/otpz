@@ -6,7 +6,6 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\InvalidAuthenticatableModel;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use BenBjurstrom\Otpz\Support\Config;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
