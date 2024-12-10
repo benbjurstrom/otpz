@@ -24,6 +24,10 @@
             --tw-bg-opacity: 1;
             background-color: rgb(243 244 246 / var(--tw-bg-opacity))
         }
+        .bg-slate-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+        }
         .bg-white {
             --tw-bg-opacity: 1;
             background-color: rgb(255 255 255 / var(--tw-bg-opacity))
@@ -31,6 +35,10 @@
         .text-black {
             --tw-text-opacity: 1;
             color: rgb(0 0 0 / var(--tw-text-opacity))
+        }
+        .text-slate-500 {
+            --tw-text-opacity: 1;
+            color: rgb(100 116 139 / var(--tw-text-opacity))
         }
         .text-slate-950 {
             --tw-text-opacity: 1;
@@ -88,8 +96,14 @@
                                 </div>
                                 <div role="separator" style="line-height: 24px">&zwj;</div>
                                 <p style="margin: 0px;">
-                                    {{ $footer }}
+                                    {{ $subcopy }}
                                 </p>
+                                <div role="separator" class="bg-slate-100" style="background-color: rgb(241 245 249 / 1); height: 1px; line-height: 1px; margin: 24px 0">&zwj;</div>
+                                <p class="text-slate-500" style="text-align: center; font-size: 0.875rem; line-height: 1.25rem; color: rgb(100 116 139 / 1)">
+                                </p>
+                                <p style="text-align: left; font-size: 0.875rem; line-height: 1.25rem">{{ $footer }}
+                                </p>
+                                <p></p>
                             </td>
                         </tr>
                     </table>

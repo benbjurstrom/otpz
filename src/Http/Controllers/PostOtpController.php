@@ -2,26 +2,33 @@
 
 namespace BenBjurstrom\Otpz\Http\Controllers;
 
-use BenBjurstrom\Otpz\Enums\OtpStatus;
+use BenBjurstrom\Otpz\Actions\AttemptOtp;
+use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;
 use BenBjurstrom\Otpz\Http\Requests\OtpRequest;
-use BenBjurstrom\Otpz\Support\Config;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class PostOtpController
 {
-    public function __invoke(OtpRequest $request, int $id): RedirectResponse
+    public function __invoke(OtpRequest $request, int $id): RedirectResponse|View
     {
-        if (! $request->hasValidSignature()) {
-            return redirect()->route('login')->withErrors(['email' => OtpStatus::EXPIRED->errorMessage()])->withInput();
+        try {
+            $data = $request->safe()->only(['code']);
+            $otp = (new AttemptOtp)->handle($id, $data['code']);
+
+            Auth::loginUsingId($otp->user_id); // fires Illuminate\Auth\Events\Login;
+            Session::regenerate();
+
+            if (! $otp->user->hasVerifiedEmail()) {
+                $otp->user->markEmailAsVerified();
+            }
+
+            return redirect()->intended('/dashboard');
+        } catch (OtpAttemptException $e) {
+            throw ValidationException::withMessages(['code' => $e->getMessage()]);
         }
-
-        $model = Config::getAuthenticatableModel();
-        $user = $model::findOrFail($id);
-        $request->authenticate($user);
-
-        Session::regenerate();
-
-        return redirect()->intended('/dashboard');
     }
 }

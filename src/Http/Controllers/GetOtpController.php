@@ -3,7 +3,7 @@
 namespace BenBjurstrom\Otpz\Http\Controllers;
 
 use BenBjurstrom\Otpz\Enums\OtpStatus;
-use BenBjurstrom\Otpz\Support\Config;
+use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -17,15 +17,14 @@ class GetOtpController
             return redirect()->route('login')->withErrors(['email' => OtpStatus::EXPIRED->errorMessage()])->withInput();
         }
 
-        $model = Config::getAuthenticatableModel();
-        $user = $model::findOrFail($id);
+        $otp = Otp::findOrFail($id);
 
         $url = URL::temporarySignedRoute(
-            'otp.post', now()->addMinutes(5), ['id' => $user->id]
+            'otp.post', now()->addMinutes(5), ['id' => $otp->id]
         );
 
         return view('otpz::otp', [
-            'email' => $user->email,
+            'email' => $otp->user->email,
             'url' => $url,
             'code' => $request->code,
         ]);

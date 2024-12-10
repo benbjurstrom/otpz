@@ -1,30 +1,31 @@
 <div align="center">
-    <img src="https://github.com/benbjurstrom/plink/blob/main/art/plink.png?raw=true" alt="Plink Screenshot">
+    <img src="https://github.com/benbjurstrom/otpz/blob/main/art/logo.png?raw=true" alt="OTPz Screenshot">
 </div>
 
-# Passwordless Log-In Links for Laravel
+# First Factor One-Time Passwords for Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/benbjurstrom/plink.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/plink)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/plink/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/benbjurstrom/plink/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/plink/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/benbjurstrom/plink/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/benbjurstrom/plink.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/plink)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/benbjurstrom/otpz.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/otpz)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/benbjurstrom/otpz.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/otpz)
 
-This package provides full-featured passwordless log-in links for Laravel applications.
+This package provides secure first factor one-time passwords (OTPs) for Laravel applications. Users enter their email and receive a one-time code to sign in.
 
-- ✅ Rate limited
-- ✅ Invalidated after first use
-- ✅ Locked to the user's session
-- ✅ Configurable expiration
-- ✅ Detailed error messages
-- ✅ Customizable mail template
-- ✅ Auditable logs
+✅ Rate-limited
+✅ Invalidated after use
+✅ Configurable expiration
+✅ Locked to the user's session
+✅ Invalidated after too many failed attempts
+✅ Detailed error messages
+✅ Customizable mail template
+✅ Auditable logs
 
 ## Installation
 
-### 1. Install the package via composer
+1. Install the package via composer:
 
 ```bash
-composer require benbjurstrom/plink
+composer require benbjurstrom/otpz
 ```
 
 ### 2. Add the package's interface and trait to your Authenticatable model
@@ -62,7 +63,7 @@ Route::otpRoutes();
 ### 5. (Optional) Publish the views for custom styling
 
 ```bash
-php artisan vendor:publish --tag="plink-views"
+php artisan vendor:publish --tag="otpz-views"
 ```
 
 This package publishes the following views:
@@ -70,19 +71,18 @@ This package publishes the following views:
 resources/
 └── views/
     └── vendor/
-        └── plink/
-            ├── error.blade.php
-            ├── components/
-                └── template.blade.php
+        └── otpz/
+            ├── otp.blade.php               (for entering the OTP)
+            ├── components/template.blade.php
             └── mail/
-                ├── notification.blade.php
-                └── plink.blade.php
+                ├── notification.blade.php  (standard template)
+                └── otpz.blade.php          (custom template)
 ```
 
 ### 6. (Optional) Publish the config file
 
 ```bash
-php artisan vendor:publish --tag="plink-config"
+php artisan vendor:publish --tag="otpz-config"
 ```
 
 This is the contents of the published config file:
@@ -93,10 +93,29 @@ This is the contents of the published config file:
 return [
     /*
     |--------------------------------------------------------------------------
+    | Expiration and Throttling
+    |--------------------------------------------------------------------------
+    |
+    | These settings control the security aspects of the generated codes,
+    | including their expiration time and the throttling mechanism to prevent
+    | abuse.
+    |
+    */
+
+    'expiration' => 5, // Minutes
+
+    'limits' => [
+        ['limit' => 1, 'minutes' => 1],
+        ['limit' => 3, 'minutes' => 5],
+        ['limit' => 5, 'minutes' => 30],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Model Configuration
     |--------------------------------------------------------------------------
     |
-    | This setting determines the model used by Plink to store and retrieve
+    | This setting determines the model used by Otpz to store and retrieve
     | one-time passwords. By default, it uses the 'App\Models\User' model.
     |
     */
@@ -110,33 +129,35 @@ return [
     | Mailable Configuration
     |--------------------------------------------------------------------------
     |
-    | This setting determines the Mailable class used by Plink to send emails.
+    | This setting determines the Mailable class used by Otpz to send emails.
     | Change this to your own Mailable class if you want to customize the email
     | sending behavior.
     |
     */
 
-    'mailable' => BenBjurstrom\Plink\Mail\OtpMail::class,
+    'mailable' => BenBjurstrom\Otpz\Mail\OtpzMail::class,
 
     /*
     |--------------------------------------------------------------------------
     | Template Configuration
     |--------------------------------------------------------------------------
     |
-    | This setting determines the email template used by Plink to send emails.
-    | Switch to 'plink::mail.notification' if you prefer to use the default 
+    | This setting determines the email template used by Otpz to send emails.
+    | Switch to 'otpz::mail.notification' if you prefer to use the default
     | Laravel notification template.
     |
     */
 
-    'template' => 'plink::mail.plink',
-    // 'template' => 'plink::mail.notification',
+    'template' => 'otpz::mail.otpz',
+    // 'template' => 'otpz::mail.notification',
 ];
 ```
 
 ## Usage
+After installing Laravel Breeze or your preferred UI scaffolding, you'll need to replace the login form's login step. Instead of authenticating directly, send the OTP email and redirect the user to the OTP entry page.
 
-1. Replace the Laravel Breeze [LoginForm authenticate method](https://github.com/laravel/breeze/blob/2.x/stubs/livewire-common/app/Livewire/Forms/LoginForm.php#L29C6-L29C41) with a sendEmail method that runs the SendPlink action. For example:
+### Laravel Breeze Livewire Example
+1. Replace the [LoginForm authenticate method](https://github.com/laravel/breeze/blob/2.x/stubs/livewire-common/app/Livewire/Forms/LoginForm.php#L29C6-L29C41) with a sendEmail method that runs the SendOtp action. For example:
 ```php
     public function sendEmail(): void
     {
@@ -146,8 +167,8 @@ return [
         RateLimiter::hit($this->throttleKey(), 300);
 
         try {
-            (new SendPlink)->handle($this->email);
-        } catch (PlinkThrottleException $e) {
+            (new SendOtp)->handle($this->email);
+        } catch (OtpThrottleException $e) {
             throw ValidationException::withMessages([
                 'form.email' => $e->getMessage(),
             ]);
@@ -156,6 +177,17 @@ return [
         RateLimiter::clear($this->throttleKey());
     }
 ````
+
+2. Next replace [Login component's login method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/livewire/resources/views/livewire/pages/auth/login.blade.php#L19-L23) with a method that calls the sendEmail method and redirects to the OTP entry page. For example:
+
+```php
+    public function login(): void
+    {
+        $otp = $this->form->sendEmail();
+        
+        $this->redirect($otp->url);
+    }
+``` 
 
 Everything else is handled by the package components.
 

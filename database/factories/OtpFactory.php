@@ -15,6 +15,7 @@ class OtpFactory extends Factory
     public function definition(): array
     {
         $code = Str::upper(Str::random(9));
+
         return [
             'user_id' => User::factory(),
             'status' => OtpStatus::ACTIVE,

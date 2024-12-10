@@ -5,6 +5,8 @@ namespace BenBjurstrom\Otpz\Actions;
 use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
+use BenBjurstrom\Otpz\Models\Otp;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -13,8 +15,9 @@ use Illuminate\Support\Str;
 class CreateOtp
 {
     /**
+     * @return list<Otp|string>
+     *
      * @throws OtpThrottleException
-     * @return array<Otp, string>
      */
     public function handle(Otpable $user): array
     {
@@ -40,11 +43,11 @@ class CreateOtp
 
     private function getThresholds(): array
     {
-        return [
+        return config('otpz.limits', [
             ['limit' => 1, 'minutes' => 1],
             ['limit' => 3, 'minutes' => 5],
             ['limit' => 5, 'minutes' => 30],
-        ];
+        ]);
     }
 
     private function getOtpCount(Otpable $user, int $minutes): int
@@ -76,26 +79,27 @@ class CreateOtp
     }
 
     /**
-     * @return array<Otp, string>
+     * @return list<Otp|string>
      */
     private function createOtp(Otpable $user): array
     {
-        // Generate a secure 9-digit OTP code
-        $code = Str::upper(Str::random(9));
+        return DB::transaction(function () use ($user) {
+            // Generate a secure 9-digit OTP code
+            $code = Str::upper(Str::random(9));
 
-        // Invalidate existing active OTPs
-        $user->otps()
-            ->where('status', OtpStatus::ACTIVE)
-            ->update(['status' => OtpStatus::SUPERSEDED]);
+            // Invalidate existing active OTPs
+            $user->otps()
+                ->where('status', OtpStatus::ACTIVE)
+                ->update(['status' => OtpStatus::SUPERSEDED]);
 
-        // Create and save the new OTP
-        $otp = $user->otps()->create([
-            'code' => $code,
-            'status' => OtpStatus::ACTIVE,
-            'ip_address' => request()->ip(),
-        ]);
+            // Create and save the new OTP
+            $otp = $user->otps()->create([
+                'code' => $code,
+                'status' => OtpStatus::ACTIVE,
+                'ip_address' => request()->ip(),
+            ]);
 
-
-        return [$otp, $code];
+            return [$otp, $code];
+        });
     }
 }

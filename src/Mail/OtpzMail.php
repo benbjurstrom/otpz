@@ -8,7 +8,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\URL;
 
 class OtpzMail extends Mailable
 {
@@ -28,7 +27,7 @@ class OtpzMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Secure '.config('app.name').' Login Link',
+            subject: 'Sign in to '.config('app.name'),
         );
     }
 
@@ -37,18 +36,19 @@ class OtpzMail extends Mailable
      */
     public function content(): Content
     {
-        $url = URL::temporarySignedRoute('otp.show', now()->addMinutes(5), [
-            'id' => $this->otp->id,
-            'session' => request()->session()->getId(),
-        ]);
+        $email = $this->otp->user->email;
+
+        // Format the code with hyphens for readability
+        $formattedCode = substr_replace($this->code, '-', 3, 0);
+        $formattedCode = substr_replace($formattedCode, '-', 7, 0);
 
         $template = config('otpz.template', 'otpz::mail.otpz');
 
         return new Content(
             markdown: $template,
             with: [
-                'url' => $url,
-                'code' => $this->code,
+                'email' => $email,
+                'code' => $formattedCode,
             ],
         );
     }

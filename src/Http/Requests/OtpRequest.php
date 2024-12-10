@@ -3,7 +3,7 @@
 namespace BenBjurstrom\Otpz\Http\Requests;
 
 use BenBjurstrom\Otpz\Actions\AttemptOtp;
-use BenBjurstrom\Otpz\Exceptions\OtpAttemptsException;
+use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -56,7 +56,7 @@ class OtpRequest extends FormRequest
         $code = $this->code;
         try {
             (new AttemptOtp)->handle($user, $code);
-        } catch (OtpAttemptsException $e) {
+        } catch (OtpAttemptException $e) {
             throw ValidationException::withMessages([
                 'code' => $e->getMessage(),
             ]);

@@ -35,15 +35,13 @@
                             id="otp-description"
                             class="mb-8 text-sm text-zinc-600 dark:text-zinc-400"
                         >
-                            Enter the alpha numeric code sent to your email. The
+                            Enter the alpha numeric code sent to {{ $email }}. The
                             code is case insensitive and dashes will be added
                             automatically.
                         </p>
 
                         <div class="flex justify-center">
                             <input
-                                {{ $code ? 'readonly' : '' }}
-                                {{ $code ? 'value="'. $code .'"' : '' }}
                                 x-data="{}"
                                 id="code"
                                 type="text"
@@ -86,10 +84,6 @@
                     role="region"
                     aria-label="Additional options"
                 >
-                    <span id="resend-prompt">
-                         Sent to {{ $email }}. Haven't received it?
-                    </span>
-                    <br>
                     <a
                         href="{{ route('login') }}"
                         class="font-medium text-zinc-700 underline decoration-zinc-500/50 underline-offset-2 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-300 dark:decoration-zinc-400/50 dark:hover:text-zink-100 dark:focus:ring-offset-zinc-800"

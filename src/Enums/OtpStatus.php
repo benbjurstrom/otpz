@@ -10,6 +10,7 @@ enum OtpStatus: int
     case ATTEMPTED = 3;
     case USED = 4;
     case INVALID = 5;
+    case SIGNATURE = 6;
 
     public function errorMessage(): string
     {
@@ -19,7 +20,8 @@ enum OtpStatus: int
             self::EXPIRED => 'The active code has expired. Please request a new code.',
             self::ATTEMPTED => 'Too many attempts. Please request a new code.',
             self::USED => 'The active code has already been used. Please request a new code.',
-            self::INVALID => 'The given code was incorrect. Please try again.',
+            self::INVALID => 'The given code is invalid.',
+            self::SIGNATURE => 'The request signature is invalid.',
         };
     }
 }
