@@ -30,7 +30,8 @@ it('sends a otp email to an existing user', function () {
 it('creates a new user and sends them a otp email', function () {
     $randomEmail = 'newuser_'.Str::random(10).'@example.com';
 
-    $user = (new SendOtp)->handle($randomEmail);
+    $otp = (new SendOtp)->handle($randomEmail);
+    $user = $otp->user;
 
     expect($user->email)->toBe($randomEmail);
     expect($user->exists)->toBeTrue();

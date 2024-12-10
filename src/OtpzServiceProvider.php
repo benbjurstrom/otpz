@@ -6,22 +6,12 @@ use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
 use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\Mail\OtpzMail;
 use BenBjurstrom\Otpz\Models\Otp;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class OtpzServiceProvider extends PackageServiceProvider
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'BenBjurstrom\\Otpz\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
-    }
-
     public function configurePackage(Package $package): void
     {
         /*

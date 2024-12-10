@@ -6,6 +6,7 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\InvalidAuthenticatableModel;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use BenBjurstrom\Otpz\Support\Config;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\URL;
  * @property string $code
  * @property bool $remember
  * @property int $attempts
+ * @property int|string $user_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * */
@@ -50,7 +52,7 @@ class Otp extends Model
      *
      * @throws InvalidAuthenticatableModel
      */
-    public function user()
+    public function user(): BelongsTo
     {
         $authenticatableModel = Config::getAuthenticatableModel();
 

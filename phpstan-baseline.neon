@@ -4,3 +4,23 @@ parameters:
 			message: "#^Class App\\\\Models\\\\User not found\\.$#"
 			count: 1
 			path: config/otpz.php
+
+		-
+			message: "#^Access to an undefined property BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Http/Controllers/GetOtpController.php
+
+		-
+			message: "#^Access to an undefined property BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Mail/OtpzMail.php
+
+		-
+			message: "#^Method BenBjurstrom\\\\Otpz\\\\Models\\\\Otp\\:\\:user\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable, BenBjurstrom\\\\Otpz\\\\Models\\\\Otp\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model, \\$this\\(BenBjurstrom\\\\Otpz\\\\Models\\\\Otp\\)\\>\\.$#"
+			count: 1
+			path: src/Models/Otp.php
+
+		-
+			message: "#^Type BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable in generic type Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\<BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable, BenBjurstrom\\\\Otpz\\\\Models\\\\Otp\\> in PHPDoc tag @return is not subtype of template type TRelatedModel of Illuminate\\\\Database\\\\Eloquent\\\\Model of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\.$#"
+			count: 1
+			path: src/Models/Otp.php

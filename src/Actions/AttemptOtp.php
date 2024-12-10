@@ -8,6 +8,7 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use BenBjurstrom\Otpz\Models\Otp;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -55,7 +56,7 @@ class AttemptOtp
      */
     protected function validateNotExpired(Otp $otp): void
     {
-        $expiration = now()->addMinutes(config('otpz.expiration', 5));
+        $expiration = Carbon::now()->subMinutes(config('otpz.expiration', 5));
         if ($otp->created_at->lt($expiration)) {
             $otp->update(['status' => OtpStatus::EXPIRED]);
             throw new OtpAttemptException($otp->status->errorMessage());
