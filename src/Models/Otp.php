@@ -47,7 +47,7 @@ class Otp extends Model
     ];
 
     /**
-     * @return BelongsTo<Otpable, Otp>
+     * @return BelongsTo<Model&Otpable, $this>
      *
      * @throws InvalidAuthenticatableModel
      */
