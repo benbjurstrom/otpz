@@ -163,8 +163,8 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
     use BenBjurstrom\Otpz\Actions\SendOtp;
     use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
     use BenBjurstrom\Otpz\Models\Otp;
-
-    ...
+    //...
+    
     public function sendEmail(): Otp
     {
         $this->validate();
@@ -196,8 +196,21 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
 
 ### Laravel Breeze Inertia Example
 
-1. Replace the [LoginForm authenticate method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/default/app/Http/Requests/Auth/LoginRequest.php#L40) with a sendEmail method that runs the SendOtp action and returns the newly created Otp.
+1. Remove password from the rules array and replace the [LoginRequest authenticate method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/default/app/Http/Requests/Auth/LoginRequest.php#L40) with a sendEmail method that runs the SendOtp action and returns the newly created Otp.
 ```php
+    use BenBjurstrom\Otpz\Actions\SendOtp;
+    use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
+    use BenBjurstrom\Otpz\Models\Otp;
+    //...
+    
+    public function rules(): array
+    {
+        return [
+            'email' => ['required', 'string', 'email']
+        ];
+    }
+    //...
+    
     public function sendEmail(): Otp
     {
         $this->ensureIsNotRateLimited();
