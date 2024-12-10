@@ -58,9 +58,9 @@ class Otp extends Model
         return $this->belongsTo($authenticatableModel);
     }
 
-    public function getUrlAttribute()
+    public function getUrlAttribute(): string
     {
-        URL::temporarySignedRoute('otp.show', now()->addMinutes(5), [
+        return URL::temporarySignedRoute('otp.show', now()->addMinutes(5), [
             'id' => $this->id,
             'session' => request()->session()->getId(),
         ]);

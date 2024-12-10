@@ -59,11 +59,16 @@
                             />
                             <input type="hidden" name="email" value="{{$email}}">
                         </div>
-                        <x-input-error
-                            :messages="$errors->get('code')"
-                            class="mt-2"
-                            id="otp-error"
-                        />
+                        @if ($errors->get('code'))
+                            <ul
+                                id="otp-error"
+                                class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1"
+                            >
+                                @foreach ((array) $errors->get('code') as $message)
+                                    <li>{{ $message }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
                     <div>
