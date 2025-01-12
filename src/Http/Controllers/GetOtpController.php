@@ -6,21 +6,35 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class GetOtpController
 {
-    public function __invoke(Request $request, int $id): View|RedirectResponse
+    public function __invoke(Request $request, string $id): View|RedirectResponse
     {
         if (! $request->hasValidSignature()) {
-            return redirect()->route('login')->withErrors(['email' => OtpStatus::EXPIRED->errorMessage()])->withInput();
+            $message = OtpStatus::SIGNATURE->errorMessage();
+            Session::flash('status', __($message));
+
+            return redirect()->route('login');
+        }
+
+        if ($request->sessionId !== request()->session()->getId()) {
+            $message = OtpStatus::SESSION->errorMessage();
+            Session::flash('status', __($message));
+
+            return redirect()->route('login');
         }
 
         $otp = Otp::findOrFail($id);
 
         $url = URL::temporarySignedRoute(
-            'otp.post', now()->addMinutes(5), ['id' => $otp->id]
+            'otp.post', now()->addMinutes(5), [
+                'id' => $otp->id,
+                'sessionId' => request()->session()->getId(),
+            ],
         );
 
         return view('otpz::otp', [

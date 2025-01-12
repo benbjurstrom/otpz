@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('otps', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('code');
             $table->tinyInteger('attempts')->default(0);

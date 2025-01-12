@@ -30,7 +30,7 @@ it('successfully validates and marks otp as used', function () {
 
     Request::merge(['session' => 'test-session-id']);
 
-    $attemptedOtp = (new AttemptOtp)->handle($otp->id, $code);
+    $attemptedOtp = (new AttemptOtp)->handle($otp->id, $code, 'test-session-id');
 
     expect($attemptedOtp->refresh())
         ->status->toBe(OtpStatus::USED)
@@ -44,7 +44,7 @@ it('throws exception for invalid signature', function () {
     ])->create();
     Request::macro('hasValidSignature', fn () => false);
 
-    expect(fn () => (new AttemptOtp)->handle($otp->id, $code))
+    expect(fn () => (new AttemptOtp)->handle($otp->id, $code, 'test-session-id'))
         ->toThrow(OtpAttemptException::class, OtpStatus::SIGNATURE->errorMessage());
 });
 
@@ -56,7 +56,7 @@ it('throws exception for expired signature', function () {
     Request::macro('hasValidSignature', fn () => false);
     Request::macro('signatureHasNotExpired', fn () => false);
 
-    expect(fn () => (new AttemptOtp)->handle($otp->id, $code))
+    expect(fn () => (new AttemptOtp)->handle($otp->id, $code, 'test-session-id'))
         ->toThrow(OtpAttemptException::class, OtpStatus::SIGNATURE->errorMessage());
 });
 
@@ -68,7 +68,7 @@ it('throws exception for non-active otp status', function () {
         ->used()
         ->create();
 
-    expect(fn () => (new AttemptOtp)->handle($otp->id, $code))
+    expect(fn () => (new AttemptOtp)->handle($otp->id, $code, 'test-session-id'))
         ->toThrow(OtpAttemptException::class, OtpStatus::USED->errorMessage());
 });
 
@@ -80,7 +80,7 @@ it('throws exception for expired otp (older than 5 minutes)', function () {
         ->expired()
         ->create();
 
-    expect(fn () => (new AttemptOtp)->handle($otp->id, $code))
+    expect(fn () => (new AttemptOtp)->handle($otp->id, $code, 'test-session-id'))
         ->toThrow(OtpAttemptException::class, OtpStatus::EXPIRED->errorMessage());
 
     expect($otp->refresh()->status)->toBe(OtpStatus::EXPIRED);
@@ -93,12 +93,12 @@ it('throws exception for invalid code', function () {
     ])->create();
     Request::merge(['session' => 'wrong-session-id']);
 
-    expect(fn () => (new AttemptOtp)->handle($otp->id, 'INVALIDCODE'))
+    expect(fn () => (new AttemptOtp)->handle($otp->id, 'INVALIDCODE', 'test-session-id'))
         ->toThrow(OtpAttemptException::class, OtpStatus::INVALID->errorMessage());
 });
 
 it('throws exception for non-existent otp', function () {
-    expect(fn () => (new AttemptOtp)->handle(999, 'INVALIDCODE'))
+    expect(fn () => (new AttemptOtp)->handle(999, 'INVALIDCODE', 'test-session-id'))
         ->toThrow(Illuminate\Database\Eloquent\ModelNotFoundException::class);
 });
 
@@ -112,7 +112,7 @@ it('allows attempt within 5 minute window', function () {
 
     Request::merge(['session' => 'test-session-id']);
 
-    $attemptedOtp = (new AttemptOtp)->handle($otp->id, $code);
+    $attemptedOtp = (new AttemptOtp)->handle($otp->id, $code, 'test-session-id');
 
     expect($attemptedOtp->refresh())
         ->status->toBe(OtpStatus::USED);

@@ -11,6 +11,7 @@ enum OtpStatus: int
     case USED = 4;
     case INVALID = 5;
     case SIGNATURE = 6;
+    case SESSION = 7;
 
     public function errorMessage(): string
     {
@@ -21,7 +22,8 @@ enum OtpStatus: int
             self::ATTEMPTED => 'Too many attempts. Please request a new code.',
             self::USED => 'The active code has already been used. Please request a new code.',
             self::INVALID => 'The given code is invalid.',
-            self::SIGNATURE => 'The request signature is invalid.',
+            self::SIGNATURE => 'The route signature is invalid.',
+            self::SESSION => 'The sign-in code was requested in a different session. Please login using the same browser that requested the code.',
         };
     }
 }

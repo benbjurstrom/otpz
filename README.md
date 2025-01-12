@@ -7,18 +7,17 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/benbjurstrom/otpz.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/otpz)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/benbjurstrom/otpz.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/otpz)
 
 This package provides secure first factor one-time passwords (OTPs) for Laravel applications. Users enter their email and receive a one-time code to sign in.
 
-✅ Rate-limited
-✅ Invalidated after use
-✅ Configurable expiration
-✅ Locked to the user's session
-✅ Invalidated after too many failed attempts
-✅ Detailed error messages
-✅ Customizable mail template
-✅ Auditable logs
+- ✅ Rate-limited
+- ✅ Configurable expiration
+- ✅ Invalidated after first use
+- ✅ Locked to the user's session
+- ✅ Invalidated after too many failed attempts
+- ✅ Detailed error messages
+- ✅ Customizable mail template
+- ✅ Auditable logs
 
 ## Installation
 
@@ -154,15 +153,23 @@ return [
 ```
 
 ## Usage
-After installing Laravel Breeze or your preferred UI scaffolding, you'll need to replace the login form's login step. Instead of authenticating directly, send the OTP email and redirect the user to the OTP entry page.
 
 ### Laravel Breeze Livewire Example
-1. Replace the [LoginForm authenticate method](https://github.com/laravel/breeze/blob/2.x/stubs/livewire-common/app/Livewire/Forms/LoginForm.php#L29C6-L29C41) with a sendEmail method that runs the SendOtp action and returns the newly created Otp.
+1. Replace the Breeze provided [App\Livewire\Forms\LoginForm::authenticate](https://github.com/laravel/breeze/blob/2.x/stubs/livewire-common/app/Livewire/Forms/LoginForm.php#L29C6-L29C41) method with a sendEmail method that runs the SendOtp action. Also be sure to remove password from the LoginForm's properties.
 
 ```php
+    // app/Livewire/Forms/LoginForm.php
+    
     use BenBjurstrom\Otpz\Actions\SendOtp;
     use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
     use BenBjurstrom\Otpz\Models\Otp;
+    //...
+    
+    #[Validate('required|string|email')]
+    public string $email = '';
+
+    #[Validate('boolean')]
+    public bool $remember = false;
     //...
     
     public function sendEmail(): Otp
@@ -173,7 +180,7 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
         RateLimiter::hit($this->throttleKey(), 300);
 
         try {
-            (new SendOtp)->handle($this->email);
+            $otp = (new SendOtp)->handle($this->email, $this->remember);
         } catch (OtpThrottleException $e) {
             throw ValidationException::withMessages([
                 'form.email' => $e->getMessage(),
@@ -181,13 +188,18 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
         }
 
         RateLimiter::clear($this->throttleKey());
+        
+        return $otp;
     }
 ````
 
-2. Update the [Login component's login method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/livewire/resources/views/livewire/pages/auth/login.blade.php#L19-L23) to call the sendEmail method and redirect to the OTP entry page.
+2. Update [resources/views/livewire/pages/auth/login.blade.php](https://github.com/laravel/breeze/blob/2.x/stubs/livewire/resources/views/livewire/pages/auth/login.blade.php) such that the login function calls our new sendEmail method and redirects to the OTP entry page. You can also remove the password input field in this same file.
+
 ```php
     public function login(): void
     {
+        $this->validate();
+    
         $otp = $this->form->sendEmail();
         
         $this->redirect($otp->url);
@@ -196,8 +208,11 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
 
 ### Laravel Breeze Inertia Example
 
-1. Remove password from the rules array and replace the [LoginRequest authenticate method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/default/app/Http/Requests/Auth/LoginRequest.php#L40) with a sendEmail method that runs the SendOtp action and returns the newly created Otp.
+1. Replace the Breeze provided [App\Http\Requests\Auth\LoginRequest::authenticate](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/default/app/Http/Requests/Auth/LoginRequest.php) method with a sendEmail method that runs the SendOtp action. Also be sure to remove password from the rules array.
+
 ```php
+    // app/Http/Requests/Auth/LoginRequest.php
+
     use BenBjurstrom\Otpz\Actions\SendOtp;
     use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
     use BenBjurstrom\Otpz\Models\Otp;
@@ -217,7 +232,7 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
         RateLimiter::hit($this->throttleKey(), 300);
 
         try {
-            $otp = (new SendOtp)->handle($this->email);
+            $otp = (new SendOtp)->handle($this->email, $this->remember);
         } catch (OtpThrottleException $e) {
             throw ValidationException::withMessages([
                 'email' => $e->getMessage(),
@@ -230,7 +245,7 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
     }
 ```
 
-2. Update the [AuthenticatedSessionController store method](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/inertia-common/app/Http/Controllers/Auth/AuthenticatedSessionController.php#L30) to call the sendEmail method and redirect to the OTP entry page.
+2. Update the [App\Http\Controllers\Auth\AuthenticatedSessionController::store](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/inertia-common/app/Http/Controllers/Auth/AuthenticatedSessionController.php) method to call our new sendEmail method and redirect to the OTP entry page.
 
 ```php
     public function store(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
@@ -240,6 +255,8 @@ After installing Laravel Breeze or your preferred UI scaffolding, you'll need to
         return Inertia::location($otp->url);
     }
 ```
+
+3. Remove the password input field from the [resources/js/Pages/Auth/Login.vue](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/inertia-vue/resources/js/Pages/Auth/Login.vue) file.
 
 Everything else is handled by the package components.
 

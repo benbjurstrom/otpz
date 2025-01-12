@@ -13,14 +13,14 @@ use Illuminate\View\View;
 
 class PostOtpController
 {
-    public function __invoke(OtpRequest $request, int $id): RedirectResponse|View
+    public function __invoke(OtpRequest $request, string $id): RedirectResponse|View
     {
         try {
-            $data = $request->safe()->only(['code']);
+            $data = $request->safe()->only(['code', 'sessionId']);
 
-            $otp = (new AttemptOtp)->handle($id, $data['code']);
+            $otp = (new AttemptOtp)->handle($id, $data['code'], $data['sessionId']);
 
-            Auth::loginUsingId($otp->user_id); // fires Illuminate\Auth\Events\Login;
+            Auth::loginUsingId($otp->user_id, $otp->remember); // fires Illuminate\Auth\Events\Login;
             Session::regenerate();
 
             if (! $otp->user->hasVerifiedEmail()) {

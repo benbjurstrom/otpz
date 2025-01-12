@@ -19,11 +19,11 @@ class CreateOtp
      *
      * @throws OtpThrottleException
      */
-    public function handle(Otpable $user): array
+    public function handle(Otpable $user, bool $remember = false): array
     {
         $this->throttle($user);
 
-        return $this->createOtp($user);
+        return $this->createOtp($user, $remember);
     }
 
     /**
@@ -81,11 +81,11 @@ class CreateOtp
     /**
      * @return list<Otp|string>
      */
-    private function createOtp(Otpable $user): array
+    private function createOtp(Otpable $user, bool $remember): array
     {
-        return DB::transaction(function () use ($user) {
+        return DB::transaction(function () use ($user, $remember) {
             // Generate a secure 9-digit OTP code
-            $code = Str::upper(Str::random(9));
+            $code = Str::upper(Str::random(10));
 
             // Invalidate existing active OTPs
             $user->otps()
@@ -97,6 +97,7 @@ class CreateOtp
                 'code' => $code,
                 'status' => OtpStatus::ACTIVE,
                 'ip_address' => request()->ip(),
+                'remember' => $remember,
             ]);
 
             return [$otp, $code];

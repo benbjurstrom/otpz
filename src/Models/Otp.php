@@ -6,6 +6,7 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\InvalidAuthenticatableModel;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use BenBjurstrom\Otpz\Support\Config;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\URL;
  * */
 class Otp extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     /**
      * The attributes that should be cast to native types.
@@ -31,6 +32,7 @@ class Otp extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'remember' => 'boolean',
         'status' => OtpStatus::class,
         'code' => 'hashed',
     ];
@@ -41,6 +43,7 @@ class Otp extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'remember',
         'code',
         'status',
         'ip_address',
@@ -62,7 +65,7 @@ class Otp extends Model
     {
         return URL::temporarySignedRoute('otp.show', now()->addMinutes(5), [
             'id' => $this->id,
-            'session' => request()->session()->getId(),
+            'sessionId' => request()->session()->getId(),
         ]);
     }
 }

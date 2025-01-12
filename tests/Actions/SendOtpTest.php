@@ -18,9 +18,9 @@ it('sends a otp email to an existing user', function () {
     $randomEmail = 'test_'.Str::random(10).'@example.com';
     $existingUser = User::factory()->create(['email' => $randomEmail]);
 
-    $user = (new SendOtp)->handle($randomEmail);
+    $otp = (new SendOtp)->handle($randomEmail);
 
-    expect($user->id)->toBe($existingUser->id);
+    expect($otp->user->id)->toBe($existingUser->id);
 
     Mail::assertSent(OtpzMail::class, function ($mail) use ($existingUser) {
         return $mail->hasTo($existingUser->email);

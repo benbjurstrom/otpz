@@ -17,11 +17,17 @@ beforeEach(function () {
 it('creates a new otp for a user', function () {
     $user = User::factory()->create();
 
-    [$otp] = (new CreateOtp)->handle($user);
+    [$otp] = (new CreateOtp)->handle($user, true);
     expect($otp)
         ->status->toBe(OtpStatus::ACTIVE)
         ->ip_address->toBe('127.0.0.1')
         ->user_id->toBe($user->id);
+
+    // Verify the value is persisted in the database
+    $this->assertDatabaseHas('otps', [
+        'id' => $otp->id,
+        'remember' => true,
+    ]);
 });
 
 it('supersedes existing active otps when creating a new one', function () {

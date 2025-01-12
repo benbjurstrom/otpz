@@ -12,16 +12,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * @method static Otp run(string|int $id, string $code)
+ * @method static Otp run(string $id, string $code)
  */
 class AttemptOtp
 {
     /**
      * @throws OtpAttemptException
      */
-    public function handle(string|int $id, string $code): Otp
+    public function handle(string $id, string $code, string $sessionId): Otp
     {
         $this->validateSignature();
+        $this->validateSession($sessionId);
         $otp = Otp::findOrFail($id);
         $this->validateStatus($otp);
         $this->validateNotExpired($otp);
@@ -39,6 +40,16 @@ class AttemptOtp
         return $user->otps()
             ->orderBy('created_at', 'DESC')
             ->first();
+    }
+
+    /**
+     * @throws OtpAttemptException
+     */
+    protected function validateSession(string $sessionId): void
+    {
+        if ($sessionId !== session()->getId()) {
+            throw new OtpAttemptException(OtpStatus::SESSION->errorMessage());
+        }
     }
 
     /**

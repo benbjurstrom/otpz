@@ -17,7 +17,7 @@
     <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Scripts -->
+    <!-- Styles Generated With play.tailwindcss.com -->
     @vite(['resources/css/app.css'])
 </head>
 <body class="font-sans text-zinc-900 antialiased">
@@ -25,7 +25,7 @@
     <div class="w-full sm:max-w-md px-6 py-4 bg-white dark:bg-zinc-900 shadow-md overflow-hidden sm:rounded-2xl">
         <section class="mx-auto w-full max-w-xl py-6">
             <div class="text-center dark:text-zinc-100">
-                <form autocomplete="off" class="space-y-6" method="POST" action="{{ $url }}">
+                <form autocomplete="off" class="space-y-8" method="POST" action="{{ $url }}">
                     @csrf
                     <div>
                         <h2 id="otp-heading" class="mb-2 text-3xl font-bold">
@@ -46,12 +46,11 @@
                                 id="code"
                                 type="text"
                                 name="code"
-                                autocomplete="false"
+                                autocomplete="off"
                                 required
                                 autofocus
-                                class="block w-72 rounded-xl border-zinc-300 p-4 text-center text-2xl uppercase focus:border-zinc-500 focus:ring-zinc-100 font-bold placeholder:text-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 dark:placeholder-zinc-600 dark:focus:ring-zinc-700 dark:text-zinc-200"
-                                x-mask="***-***-***"
-                                placeholder="XXX-XXX-XXX"
+                                class="block w-72 rounded-xl border-zinc-300 px-4 py-3 text-center text-xl uppercase focus:border-zinc-500 focus:ring-zinc-100 font-bold placeholder:text-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 dark:placeholder-zinc-600 dark:focus:ring-zinc-700 dark:text-zinc-200 font-mono"
+                                x-mask="*****-*****"
                                 aria-labelledby="otp-heading"
                                 aria-describedby="otp-description {{ $errors->has('form.code') ? 'otp-error' : '' }}"
                                 aria-invalid="{{ $errors->has('form.code') ? 'true' : 'false' }}"
@@ -86,13 +85,10 @@
 
                 <div
                     class="text-sm text-zinc-500 dark:text-zinc-400 mt-10"
-                    role="region"
-                    aria-label="Additional options"
                 >
                     <a
                         href="{{ route('login') }}"
-                        class="font-medium text-zinc-700 underline decoration-zinc-500/50 underline-offset-2 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-300 dark:decoration-zinc-400/50 dark:hover:text-zink-100 dark:focus:ring-offset-zinc-800"
-                        aria-describedby="resend-prompt"
+                        class="font-medium text-zinc-700 underline decoration-zinc-500/50 underline-offset-2 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-300 dark:decoration-zinc-400/50 dark:hover:text-zinc-100 dark:focus:ring-offset-zinc-800"
                     >
                         Request a new code
                     </a>

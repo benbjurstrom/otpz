@@ -1,6 +1,6 @@
 <x-otpz::template>
 <x-slot:logo>
-<img src="https://raw.githubusercontent.com/benbjurstrom/plink/refs/heads/main/art/logo.png" width="100" alt="{{ config('app.name') }}">
+<img src="https://raw.githubusercontent.com/benbjurstrom/otpz/refs/heads/main/art/logo.png" width="100" alt="{{ config('app.name') }}">
 </x-slot>
 
 <x-slot:greeting>

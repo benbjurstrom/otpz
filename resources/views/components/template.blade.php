@@ -91,7 +91,7 @@
                                 <div role="separator" style="line-height: 24px">&zwj;</div>
                                 <div class="bg-gray-100 shadow-inner" style="border-radius: 0.75rem; background-color: rgb(243 244 246 / 1); padding: 1rem; text-align: center; box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow)">
                                     <div style="font-size: 1.875rem; line-height: 2.25rem; font-weight: 700">
-                                        <span>{{ $code }}</span>
+                                        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">{{ $code }}</span>
                                     </div>
                                 </div>
                                 <div role="separator" style="line-height: 24px">&zwj;</div>

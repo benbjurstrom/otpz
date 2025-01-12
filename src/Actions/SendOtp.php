@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Mail;
  */
 class SendOtp
 {
-    public function handle(string $email): Otp
+    public function handle(string $email, bool $remember = false): Otp
     {
         $mailable = config('otpz.mailable', OtpzMail::class);
         $user = (new GetUserFromEmail)->handle($email);
-        [$otp, $code] = (new CreateOtp)->handle($user);
+        [$otp, $code] = (new CreateOtp)->handle($user, $remember);
 
         Mail::to($user)->send(new $mailable($otp, $code));
 
