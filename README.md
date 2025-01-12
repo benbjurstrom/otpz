@@ -21,13 +21,20 @@ This package provides secure first factor one-time passwords (OTPs) for Laravel 
 
 ## Installation
 
-1. Install the package via composer:
+### 1. Install the package via composer:
 
 ```bash
 composer require benbjurstrom/otpz
 ```
 
-### 2. Add the package's interface and trait to your Authenticatable model
+### 2. Publish and run the migrations
+
+```bash
+php artisan vendor:publish --tag="otpz-migrations"
+php artisan migrate
+```
+
+### 3. Add the package's interface and trait to your Authenticatable model
 
 ```php
 // app/Models/User.php
@@ -43,13 +50,6 @@ class User extends Authenticatable implements Otpable
     
     // ...
 }
-```
-
-### 3. Publish and run the migrations
-
-```bash
-php artisan vendor:publish --tag="otpz-migrations"
-php artisan migrate
 ```
 
 ### 4. Add the package provided routes
