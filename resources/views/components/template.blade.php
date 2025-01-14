@@ -18,11 +18,15 @@
         td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
     </style>
     <![endif]-->
-    <title>Sign in to {{ config('app.name') }}</title>
+    <title>Sign-in to {{ config('app.name') }}</title>
     <style>
-        .bg-gray-100 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+        img {
+            max-width: 100%;
+            vertical-align: middle
+        }
+        .border-zinc-300 {
+            --tw-border-opacity: 1;
+            border-color: rgb(212 212 216 / var(--tw-border-opacity))
         }
         .bg-slate-100 {
             --tw-bg-opacity: 1;
@@ -31,6 +35,10 @@
         .bg-white {
             --tw-bg-opacity: 1;
             background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+        }
+        .bg-zinc-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(244 244 245 / var(--tw-bg-opacity))
         }
         .text-black {
             --tw-text-opacity: 1;
@@ -43,11 +51,6 @@
         .text-slate-950 {
             --tw-text-opacity: 1;
             color: rgb(2 6 23 / var(--tw-text-opacity))
-        }
-        .shadow-inner {
-            --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-            --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
-            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
         }
         @media (min-width: 640px) {
             .sm-my-8 {
@@ -70,7 +73,7 @@
 </head>
 <body class="bg-white" style="margin: 0px; width: 100%; background-color: rgb(255 255 255 / 1); padding: 0px; -webkit-font-smoothing: antialiased; word-break: break-word">
 <div role="article" aria-roledescription="email" aria-label="Sign in to WorkEval" lang="en">
-    <div class="bg-white sm-px-4" style="background-color: rgb(255 255 255 / 1); font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'">
+    <div class="bg-white sm-px-4" style="background-color: rgb(255 255 255 / 1); padding-top: 2rem; font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'">
         <table align="center" cellpadding="0" cellspacing="0" role="none">
             <tr>
                 <td style="width: 552px; max-width: 100%">
@@ -89,7 +92,7 @@
                                     {{ $copy }}
                                 </p>
                                 <div role="separator" style="line-height: 24px">&zwj;</div>
-                                <div class="bg-gray-100 shadow-inner" style="border-radius: 0.75rem; background-color: rgb(243 244 246 / 1); padding: 1rem; text-align: center; box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow)">
+                                <div class="bg-zinc-100 border-zinc-300" style="border-radius: 1rem; border: 1px solid rgb(212 212 216 / 1); background-color: rgb(244 244 245 / 1); padding: 1rem; text-align: center">
                                     <div style="font-size: 1.875rem; line-height: 2.25rem; font-weight: 700">
                                         <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">{{ $code }}</span>
                                     </div>
