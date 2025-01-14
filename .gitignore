@@ -30,3 +30,9 @@ phpstan.neon
 testbench.yaml
 /docs
 /coverage
+
+.prettierrc
+.prettierignore
+pnpm-lock.yaml
+package.json
+tailwind.config.js
