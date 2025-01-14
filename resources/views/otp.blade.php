@@ -41,6 +41,7 @@
         </div></div>
 
     <form autocomplete="off" method="POST" action="{{ $url }}" class="flex flex-col gap-6 mt-4 w-80 max-w-80">
+        @csrf
         <div>
             <div class="flex justify-center">
                 <input
