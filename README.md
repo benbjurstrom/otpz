@@ -128,7 +128,7 @@ return [
     */
 
     'models' => [
-        'authenticatable' => env('AUTH_MODEL', App\Models\User::class),
+        'authenticatable' => App\Models\User::class,
     ],
 
     /*
@@ -157,6 +157,19 @@ return [
 
     'template' => 'otpz::mail.otpz',
     // 'template' => 'otpz::mail.notification',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | User Resolver
+    |--------------------------------------------------------------------------
+    |
+    | Defines the class responsible for finding or creating users by email address.
+    | The default implementation will create a new user when an email doesn't exist.
+    | Replace with your own implementation for custom user resolution logic.
+    |
+    */
+
+    'user_resolver' => BenBjurstrom\Otpz\Actions\GetUserFromEmail::class,
 ];
 ```
 
