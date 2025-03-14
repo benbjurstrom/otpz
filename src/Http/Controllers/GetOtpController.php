@@ -31,7 +31,7 @@ class GetOtpController
         $otp = Otp::findOrFail($id);
 
         $url = URL::temporarySignedRoute(
-            'otp.post', now()->addMinutes(5), [
+            'otpz.post', now()->addMinutes(5), [
                 'id' => $otp->id,
                 'sessionId' => request()->session()->getId(),
             ],

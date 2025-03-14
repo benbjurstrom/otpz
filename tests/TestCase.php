@@ -41,9 +41,9 @@ class TestCase extends Orchestra
         $migration->up();
 
         Route::get('otpz/{id}', GetOtpController::class)
-            ->name('otp.show')->middleware('guest');
+            ->name('otpz.show')->middleware('guest');
 
         Route::post('otpz/{id}', PostOtpController::class)
-            ->name('otp.post')->middleware('guest');
+            ->name('otpz.post')->middleware('guest');
     }
 }

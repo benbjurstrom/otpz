@@ -7,6 +7,7 @@ use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\Mail\OtpzMail;
 use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -32,10 +33,10 @@ class OtpzServiceProvider extends PackageServiceProvider
     {
         Route::macro('otpRoutes', function () {
             Route::get('otpz/{id}', GetOtpController::class)
-                ->name('otp.show')->middleware('guest');
+                ->name('otpz.show')->middleware('guest');
 
             Route::post('otpz/{id}', PostOtpController::class)
-                ->name('otp.post')->middleware('guest');
+                ->name('otpz.post')->middleware('guest');
 
             if (app()->environment('local')) { // Only for local environment
                 Route::get('/otpz', function () {

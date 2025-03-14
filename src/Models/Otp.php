@@ -63,7 +63,7 @@ class Otp extends Model
 
     public function getUrlAttribute(): string
     {
-        return URL::temporarySignedRoute('otp.show', now()->addMinutes(5), [
+        return URL::temporarySignedRoute('otpz.show', now()->addMinutes(5), [
             'id' => $this->id,
             'sessionId' => request()->session()->getId(),
         ]);
