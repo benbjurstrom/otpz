@@ -17,7 +17,9 @@ class SendOtp
     public function handle(string $email, bool $remember = false): Otp
     {
         $mailable = config('otpz.mailable', OtpzMail::class);
-        $user = (new GetUserFromEmail)->handle($email);
+        $userResolver = config('otpz.user_resolver', GetUserFromEmail::class);
+
+        $user = (new $userResolver)->handle($email);
         [$otp, $code] = (new CreateOtp)->handle($user, $remember);
 
         Mail::to($user)->send(new $mailable($otp, $code));
