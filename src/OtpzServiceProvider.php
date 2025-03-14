@@ -2,12 +2,6 @@
 
 namespace BenBjurstrom\Otpz;
 
-use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
-use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
-use BenBjurstrom\Otpz\Mail\OtpzMail;
-use BenBjurstrom\Otpz\Models\Otp;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
