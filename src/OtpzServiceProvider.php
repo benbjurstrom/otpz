@@ -25,28 +25,5 @@ class OtpzServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews('otpz')
             ->hasMigration('create_otps_table');
-
-        $this->registerOtpzRouteMacro();
-    }
-
-    protected function registerOtpzRouteMacro(): self
-    {
-        Route::macro('otpRoutes', function () {
-            Route::get('otpz/{id}', GetOtpController::class)
-                ->name('otpz.show')->middleware('guest');
-
-            Route::post('otpz/{id}', PostOtpController::class)
-                ->name('otpz.post')->middleware('guest');
-
-            if (app()->environment('local')) { // Only for local environment
-                Route::get('/otpz', function () {
-                    $otp = Otp::find(1);
-
-                    return new OtpzMail($otp, '12345689');
-                });
-            }
-        });
-
-        return $this;
     }
 }

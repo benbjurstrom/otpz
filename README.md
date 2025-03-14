@@ -52,11 +52,19 @@ class User extends Authenticatable implements Otpable
 }
 ```
 
-### 4. Add the package provided routes
+### 4. (Optional) Add the following routes
+Not needed with Laravel 12 starter kits. Instead, see the [Usage](#usage) section for examples.
 
 ```php
-// routes/web.php
-Route::otpRoutes();
+// routes/auth.php
+use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
+use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
+//...
+Route::get('otpz/{id}', GetOtpController::class)
+    ->name('otpz.show')->middleware('guest');
+
+Route::post('otpz/{id}', PostOtpController::class)
+    ->name('otpz.post')->middleware('guest');
 ```
 
 ### 5. (Optional) Publish the views for custom styling
