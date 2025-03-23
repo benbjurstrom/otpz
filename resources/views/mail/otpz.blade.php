@@ -6,11 +6,11 @@
 </x-slot>
 
 <x-slot:greeting>
-Sign in to {{ config('app.name') }}
+{{ __('otpz::otp.mail.otpz.greeting') }} {{ config('app.name') }}
 </x-slot>
 
 <x-slot:copy>
-We received a sign-in request for the account {{ $email }}. Use the code below to sign in.
+{{ __('otpz::otp.mail.otpz.copy', ['email' => $email]) }}
 </x-slot>
 
 <x-slot:code>
@@ -18,10 +18,10 @@ We received a sign-in request for the account {{ $email }}. Use the code below t
 </x-slot>
 
 <x-slot:subcopy>
-If you didn't request this login link, you can safely ignore this email.
+{{ __('otpz::otp.mail.otpz.subcopy') }}
 </x-slot>
 
 <x-slot:footer>
-<strong>Security Reminder:</strong> Fraudulent websites may try to steal your login code. Only enter this code at {{ config('app.url') }}. Never enter this code on any other website or share it with anyone.
+<strong>{{ __('otpz::otp.mail.otpz.security') }}</strong> {{ __('otpz::otp.mail.otpz.footer', ['url' => config('app.url')]) }}
 </x-slot>
 </x-otpz::template>
