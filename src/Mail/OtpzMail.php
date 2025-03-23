@@ -11,7 +11,8 @@ use Illuminate\Queue\SerializesModels;
 
 class OtpzMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -27,7 +28,7 @@ class OtpzMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Sign in to '.config('app.name'),
+            subject: __('otpz::otp.mail.otpz.subject') . config('app.name'),
         );
     }
 

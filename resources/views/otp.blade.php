@@ -50,12 +50,9 @@
             <div
                 class="mb-2 text-center text-2xl font-medium text-zinc-800 dark:text-white"
             >
-                Sign-in to {{ config('app.name') }}
+                {{ __('otpz::otp.views.otp.title') }} {{ config('app.name') }}
                 <div class="mt-2 text-sm text-zinc-500 dark:text-white/70">
-                    Enter the alpha numeric code sent to
-                    <span class="font-semibold">test@example.com</span>
-                    . The code is case insensitive and dashes will be added
-                    automatically.
+                    {{ __('otpz::otp.views.otp.description') }}
                 </div>
             </div>
 
@@ -120,7 +117,7 @@
                     type="submit"
                     class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-zinc-800 px-4 text-sm font-medium text-white hover:bg-zinc-900 disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 dark:bg-white dark:text-zinc-800 dark:shadow-none dark:hover:bg-zinc-100 dark:disabled:opacity-75"
                 >
-                    Submit Code
+                    {{__('otpz::otp.views.otp.submit')}}
                 </button>
 
                 <div class="flex w-full items-center" role="none">
@@ -131,7 +128,7 @@
                     <span
                         class="mx-6 shrink whitespace-nowrap text-sm font-medium text-zinc-500 dark:text-zinc-300"
                     >
-                        or
+                        {{ __('otpz::otp.views.otp.or') }}
                     </span>
 
                     <div
@@ -144,7 +141,7 @@
                         class="inline text-sm font-medium text-inherit text-zinc-500 no-underline decoration-zinc-800/20 underline-offset-[6px] hover:text-zinc-800 hover:decoration-current dark:text-white/70 dark:decoration-white/20 dark:hover:text-white"
                         href="{{ route('login') }}"
                     >
-                        Request a new code
+                       {{ __('otpz::otp.views.otp.back') }}
                     </a>
                 </div>
             </form>
