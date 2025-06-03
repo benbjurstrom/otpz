@@ -53,8 +53,8 @@
                 Sign-in to {{ config('app.name') }}
                 <div class="mt-2 text-sm text-zinc-500 dark:text-white/70">
                     Enter the alpha numeric code sent to
-                    <span class="font-semibold">test@example.com</span>
-                    . The code is case insensitive and dashes will be added
+                    <span class="font-semibold">{{ $email ?? 'test@example.com' }}</span>.
+                    The code is case insensitive and dashes will be added
                     automatically.
                 </div>
             </div>
