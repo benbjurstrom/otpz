@@ -134,7 +134,6 @@ php artisan vendor:publish --tag="otpz-config"
 ```
 
 This is the contents of the published config file:
-
 ```php
 <?php
 
