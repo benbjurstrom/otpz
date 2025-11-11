@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { store } from '@/routes/otpz';
 import AuthLayout from '@/layouts/auth-layout';
 
 interface LoginForm {
@@ -26,7 +27,7 @@ export default function Login({ status }: LoginProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('login'), {
+        post(store.url(), {
             onFinish: () => reset('password'),
         });
     };

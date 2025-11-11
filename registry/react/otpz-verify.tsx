@@ -7,6 +7,7 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { index } from '@/routes/otpz';
 import AuthLayout from '@/layouts/auth-layout';
 
 interface LoginForm {
@@ -102,7 +103,7 @@ export default function Login({ status, id, email, url }: LoginProps) {
 
                 <div className="text-muted-foreground text-center text-sm">
                     Didn't receive it?{' '}
-                    <TextLink href={route('login')} tabIndex={5}>
+                    <TextLink href={index.url()} tabIndex={5}>
                         Request a new code
                     </TextLink>
                 </div>
