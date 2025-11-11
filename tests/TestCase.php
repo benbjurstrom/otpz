@@ -2,8 +2,8 @@
 
 namespace BenBjurstrom\Otpz\Tests;
 
-use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\OtpzServiceProvider;
+use BenBjurstrom\Otpz\Tests\Support\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\Tests\Support\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Route;

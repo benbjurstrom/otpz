@@ -33,7 +33,7 @@ OTPz works best with the official [Laravel starter kits](https://laravel.com/sta
 - **Vue** (Inertia.js)
 - **Livewire** (Volt)
 
-> **Note:** OTPz frontend components are designed to work out of the box with the Laravel starter kits and use their existing UI components (Button, Input, Label, etc.). You can also install and customize these components for any Laravel application using React, Vue, or Livewire, but you may need to adjust component imports and styling. For reference implementations with the starter kits, see the [starter kit examples](#starter-kit-examples).
+> OTPz's frontend components are designed to work out of the box with the Laravel starter kits and make use of their existing UI components (Button, Input, Label, etc.). Because these components are installed into your application you are free to customize them for any Laravel application using React, Vue, or Livewire.
 
 ---
 
@@ -158,7 +158,7 @@ That's it! The controller handles all the OTP logic for you.
 
 ### Livewire (Volt)
 
-#### 1. Publish Views
+#### 1. Publish Components
 
 ```bash
 php artisan vendor:publish --tag="otpz-livewire"
@@ -167,6 +167,7 @@ php artisan vendor:publish --tag="otpz-livewire"
 This copies the following files to your application:
 - `resources/views/livewire/auth/otpz-login.blade.php` - Email entry page
 - `resources/views/livewire/auth/otpz-verify.blade.php` - OTP code entry page
+- `app/Http/Controllers/Auth/PostOtpController.php` - Self-contained controller handling OTP verification
 
 > **Note:** These Volt components use Flux UI components and layout components from the Laravel Livewire starter kit. If you're not using the starter kit, you may need to adjust the component markup and styling.
 
@@ -175,7 +176,7 @@ This copies the following files to your application:
 Add to `routes/web.php`:
 
 ```php
-use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
+use App\Http\Controllers\Auth\PostOtpController;
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
