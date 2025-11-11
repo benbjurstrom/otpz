@@ -78,10 +78,10 @@ Choose your frontend framework:
 
 ### React (Inertia.js)
 
-#### 1. Install Frontend Components
+#### 1. Publish Components
 
 ```bash
-npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/react.json
+php artisan vendor:publish --tag="otpz-react"
 ```
 
 This copies the following files to your application:
@@ -118,10 +118,10 @@ That's it! The controller handles all the OTP logic for you.
 
 ### Vue (Inertia.js)
 
-#### 1. Install Frontend Components
+#### 1. Publish Components
 
 ```bash
-npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/vue.json
+php artisan vendor:publish --tag="otpz-vue"
 ```
 
 This copies the following files to your application:
