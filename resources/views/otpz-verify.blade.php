@@ -4,6 +4,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -39,10 +40,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $otp = Otp::findOrFail(request()->id);
         $this->email = $otp->user->email;
         $this->url = URL::temporarySignedRoute(
-                'otpz.post', now()->addMinutes(5), [
-                'id' => $otp->id,
-                'sessionId' => request()->session()->getId(),
-            ],
+            'otpz.verify', now()->addMinutes(5), [
+            'id' => $otp->id,
+            'sessionId' => request()->session()->getId(),
+        ],
         );
     }
 }; ?>

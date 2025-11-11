@@ -179,10 +179,10 @@ use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
-    Volt::route('otpz', 'livewire.auth.otpz-login')
+    Volt::route('otpz', 'auth.otpz-login')
         ->name('otpz.index');
 
-    Volt::route('otpz/{id}', 'livewire.auth.otpz-verify')
+    Volt::route('otpz/{id}', 'auth.otpz-verify')
         ->middleware('signed')
         ->name('otpz.get');
 
