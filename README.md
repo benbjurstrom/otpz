@@ -84,12 +84,12 @@ Choose your frontend framework:
 npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/react.json
 ```
 
-This installs:
+This copies the following files to your application:
 - `resources/js/pages/auth/otpz-login.tsx` - Email entry page
 - `resources/js/pages/auth/otpz-verify.tsx` - OTP code entry page
 - `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
 
-> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`), layout components (`AuthLayout`), and use wayfinder for route generation from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
 #### 2. Add Routes
 
@@ -124,12 +124,12 @@ That's it! The controller handles all the OTP logic for you.
 npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/vue.json
 ```
 
-This installs:
+This copies the following files to your application:
 - `resources/js/pages/auth/OtpzLogin.vue` - Email entry page
 - `resources/js/pages/auth/OtpzVerify.vue` - OTP code entry page
 - `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
 
-> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+> **Note:** These components import layout components (`AuthLayout`), and use wayfinder for route generation from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
 #### 2. Add Routes
 
