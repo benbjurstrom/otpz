@@ -195,6 +195,49 @@ Route::middleware('guest')->group(function () {
 
 ---
 
+## Replacing Fortify Login (Optional)
+
+The Laravel starter kits use Laravel Fortify for authentication. If you want to replace the default username/password login with OTPz:
+
+**For React:**
+
+In `app/Providers/FortifyServiceProvider.php`, update the `loginView` method:
+
+```php
+Fortify::loginView(fn (Request $request) => Inertia::render('auth/otpz-login', []));
+```
+
+**For Vue:**
+
+In `app/Providers/FortifyServiceProvider.php`, update the `loginView` method:
+
+```php
+Fortify::loginView(fn (Request $request) => Inertia::render('auth/OtpzLogin', []));
+```
+
+**For Livewire:**
+
+Livewire requires a different approach because Fortify only allows customizing views for traditional Livewire components, but OTPz uses Volt (which combines view and logic). You'll need to disable Fortify views and replace the route entirely.
+
+In `config/fortify.php`, disable views:
+
+```php
+'views' => false,
+```
+
+Then in `routes/web.php`, replace the login route:
+
+```php
+Volt::route('login', 'auth.otpz-login')
+    ->name('login');
+```
+
+Now when users visit `/login` or are redirected to the login page, they'll see the OTPz email entry form instead of the traditional username/password form.
+
+> **Note:** If you need other Fortify features like two-factor authentication or email verification, you'll need to add those routes back to your application. See the [Fortify documentation](https://laravel.com/docs/fortify) for details.
+
+---
+
 ## Configuration
 
 ### Publish Configuration File (Optional)
