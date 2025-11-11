@@ -87,7 +87,8 @@ npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/react.json
 This installs:
 - `resources/js/pages/auth/otpz-login.tsx` - Email entry page
 - `resources/js/pages/auth/otpz-verify.tsx` - OTP code entry page
-- `app/Http/Controllers/Auth/OtpzController.php` - Backend controller
+- `app/Http/Controllers/Auth/OtpzLoginController.php` - Handles email entry and OTP sending
+- `app/Http/Controllers/Auth/OtpzVerificationController.php` - Handles OTP verification
 
 > **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
@@ -96,38 +97,26 @@ This installs:
 Add to `routes/web.php`:
 
 ```php
-use App\Http\Controllers\Auth\OtpzController;
+use App\Http\Controllers\Auth\OtpzLoginController;
+use App\Http\Controllers\Auth\OtpzVerificationController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('otpz/{id}', [OtpzController::class, 'get'])
+    // Login routes
+    Route::get('login', [OtpzLoginController::class, 'create'])
+        ->name('login');
+    Route::post('login', [OtpzLoginController::class, 'store']);
+
+    // OTP verification routes
+    Route::get('otpz/{id}', [OtpzVerificationController::class, 'show'])
         ->name('otpz.get')
         ->middleware('signed');
-
-    Route::post('otpz/{id}', [OtpzController::class, 'store'])
+    Route::post('otpz/{id}', [OtpzVerificationController::class, 'store'])
         ->name('otpz.post')
         ->middleware('signed');
 });
 ```
 
-#### 3. Update Your Login Flow
-
-Replace your existing password-based login with OTP authentication. Update your login controller to:
-
-```php
-use BenBjurstrom\Otpz\Actions\SendOtp;
-use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
-
-// In your login method:
-try {
-    $otp = (new SendOtp)->handle($email, $remember);
-} catch (OtpThrottleException $e) {
-    throw ValidationException::withMessages([
-        'email' => $e->getMessage(),
-    ]);
-}
-
-return Inertia::location($otp->url);
-```
+That's it! The controllers handle all the OTP logic for you.
 
 ---
 
@@ -142,7 +131,8 @@ npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/vue.json
 This installs:
 - `resources/js/pages/auth/OtpzLogin.vue` - Email entry page
 - `resources/js/pages/auth/OtpzVerify.vue` - OTP code entry page
-- `app/Http/Controllers/Auth/OtpzController.php` - Backend controller
+- `app/Http/Controllers/Auth/OtpzLoginController.php` - Handles email entry and OTP sending
+- `app/Http/Controllers/Auth/OtpzVerificationController.php` - Handles OTP verification
 
 > **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
@@ -151,38 +141,26 @@ This installs:
 Add to `routes/web.php`:
 
 ```php
-use App\Http\Controllers\Auth\OtpzController;
+use App\Http\Controllers\Auth\OtpzLoginController;
+use App\Http\Controllers\Auth\OtpzVerificationController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('otpz/{id}', [OtpzController::class, 'get'])
+    // Login routes
+    Route::get('login', [OtpzLoginController::class, 'create'])
+        ->name('login');
+    Route::post('login', [OtpzLoginController::class, 'store']);
+
+    // OTP verification routes
+    Route::get('otpz/{id}', [OtpzVerificationController::class, 'show'])
         ->name('otpz.get')
         ->middleware('signed');
-
-    Route::post('otpz/{id}', [OtpzController::class, 'store'])
+    Route::post('otpz/{id}', [OtpzVerificationController::class, 'store'])
         ->name('otpz.post')
         ->middleware('signed');
 });
 ```
 
-#### 3. Update Your Login Flow
-
-Replace your existing password-based login with OTP authentication. Update your login controller to:
-
-```php
-use BenBjurstrom\Otpz\Actions\SendOtp;
-use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
-
-// In your login method:
-try {
-    $otp = (new SendOtp)->handle($email, $remember);
-} catch (OtpThrottleException $e) {
-    throw ValidationException::withMessages([
-        'email' => $e->getMessage(),
-    ]);
-}
-
-return Inertia::location($otp->url);
-```
+That's it! The controllers handle all the OTP logic for you.
 
 ---
 

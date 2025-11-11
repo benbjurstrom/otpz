@@ -17,9 +17,9 @@ use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
-class OtpzController
+class OtpzVerificationController
 {
-    public function get(Request $request, string $id): InertiaResponse|RedirectResponse
+    public function show(Request $request, string $id): InertiaResponse|RedirectResponse
     {
         if (! $request->hasValidSignature()) {
             $message = OtpStatus::SIGNATURE->errorMessage();
@@ -44,7 +44,7 @@ class OtpzController
             ],
         );
 
-        return Inertia::render('auth/OtpzVerify', [
+        return Inertia::render('auth/otpz-verify', [
             'email' => $otp->user->email,
             'url' => $url,
         ]);

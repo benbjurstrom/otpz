@@ -7,7 +7,7 @@
       "name": "react",
       "type": "registry:block",
       "title": "OTPz Authentication (React)",
-      "description": "Complete passwordless OTP authentication for Laravel Breeze with React and Inertia.js",
+      "description": "Complete passwordless OTP authentication with self-contained controllers for React and Inertia.js",
       "author": "Ben Bjurstrom <ben@benbjurstrom.com>",
       "registryDependencies": ["button", "input", "label", "checkbox"],
       "dependencies": ["@inertiajs/react", "lucide-react"],
@@ -23,18 +23,23 @@
           "target": "~/resources/js/pages/auth/otpz-verify.tsx"
         },
         {
-          "path": "registry/react/OtpzController.php",
+          "path": "registry/react/OtpzLoginController.php",
           "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzController.php"
+          "target": "~/app/Http/Controllers/Auth/OtpzLoginController.php"
+        },
+        {
+          "path": "registry/react/OtpzVerificationController.php",
+          "type": "registry:file",
+          "target": "~/app/Http/Controllers/Auth/OtpzVerificationController.php"
         }
       ],
-      "docs": "PREREQUISITES:\n• Laravel Breeze React starter kit installed\n• OTPz package: composer require benbjurstrom/otpz\n• Migrations run: php artisan migrate\n\nROUTES (add to routes/web.php):\n```php\nuse App\\Http\\Controllers\\Auth\\OtpzController;\n\nRoute::middleware('guest')->group(function () {\n    Route::get('otpz/{id}', [OtpzController::class, 'get'])\n        ->name('otpz.get')->middleware('signed');\n    Route::post('otpz/{id}', [OtpzController::class, 'store'])\n        ->name('otpz.post')->middleware('signed');\n});\n```\n\nUSAGE:\nUpdate your login controller to use SendOtp action and redirect to $otp->url\n\nFull docs: https://github.com/benbjurstrom/otpz"
+      "docs": "For installation and usage instructions, see: https://github.com/benbjurstrom/otpz"
     },
     {
       "name": "vue",
       "type": "registry:block",
       "title": "OTPz Authentication (Vue)",
-      "description": "Complete passwordless OTP authentication for Laravel Breeze with Vue and Inertia.js",
+      "description": "Complete passwordless OTP authentication with self-contained controllers for Vue and Inertia.js",
       "author": "Ben Bjurstrom <ben@benbjurstrom.com>",
       "registryDependencies": ["button", "input", "label", "checkbox"],
       "dependencies": ["@inertiajs/vue3", "lucide-vue-next"],
@@ -50,12 +55,17 @@
           "target": "~/resources/js/pages/auth/OtpzVerify.vue"
         },
         {
-          "path": "registry/vue/OtpzController.php",
+          "path": "registry/vue/OtpzLoginController.php",
           "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzController.php"
+          "target": "~/app/Http/Controllers/Auth/OtpzLoginController.php"
+        },
+        {
+          "path": "registry/vue/OtpzVerificationController.php",
+          "type": "registry:file",
+          "target": "~/app/Http/Controllers/Auth/OtpzVerificationController.php"
         }
       ],
-      "docs": "PREREQUISITES:\n• Laravel Breeze Vue starter kit installed\n• OTPz package: composer require benbjurstrom/otpz\n• Migrations run: php artisan migrate\n\nROUTES (add to routes/web.php):\n```php\nuse App\\Http\\Controllers\\Auth\\OtpzController;\n\nRoute::middleware('guest')->group(function () {\n    Route::get('otpz/{id}', [OtpzController::class, 'get'])\n        ->name('otpz.get')->middleware('signed');\n    Route::post('otpz/{id}', [OtpzController::class, 'store'])\n        ->name('otpz.post')->middleware('signed');\n});\n```\n\nUSAGE:\nUpdate your login controller to use SendOtp action and redirect to $otp->url\n\nFull docs: https://github.com/benbjurstrom/otpz"
+      "docs": "For installation and usage instructions, see: https://github.com/benbjurstrom/otpz"
     }
   ]
 }
