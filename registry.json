@@ -23,14 +23,9 @@
           "target": "~/resources/js/pages/auth/otpz-verify.tsx"
         },
         {
-          "path": "registry/react/OtpzLoginController.php",
+          "path": "registry/react/OtpzController.php",
           "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzLoginController.php"
-        },
-        {
-          "path": "registry/react/OtpzVerificationController.php",
-          "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzVerificationController.php"
+          "target": "~/app/Http/Controllers/Auth/OtpzController.php"
         }
       ],
       "docs": "For installation and usage instructions, see: https://github.com/benbjurstrom/otpz"
@@ -55,14 +50,9 @@
           "target": "~/resources/js/pages/auth/OtpzVerify.vue"
         },
         {
-          "path": "registry/vue/OtpzLoginController.php",
+          "path": "registry/vue/OtpzController.php",
           "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzLoginController.php"
-        },
-        {
-          "path": "registry/vue/OtpzVerificationController.php",
-          "type": "registry:file",
-          "target": "~/app/Http/Controllers/Auth/OtpzVerificationController.php"
+          "target": "~/app/Http/Controllers/Auth/OtpzController.php"
         }
       ],
       "docs": "For installation and usage instructions, see: https://github.com/benbjurstrom/otpz"

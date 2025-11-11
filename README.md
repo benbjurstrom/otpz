@@ -87,8 +87,7 @@ npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/react.json
 This installs:
 - `resources/js/pages/auth/otpz-login.tsx` - Email entry page
 - `resources/js/pages/auth/otpz-verify.tsx` - OTP code entry page
-- `app/Http/Controllers/Auth/OtpzLoginController.php` - Handles email entry and OTP sending
-- `app/Http/Controllers/Auth/OtpzVerificationController.php` - Handles OTP verification
+- `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
 
 > **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
@@ -97,26 +96,23 @@ This installs:
 Add to `routes/web.php`:
 
 ```php
-use App\Http\Controllers\Auth\OtpzLoginController;
-use App\Http\Controllers\Auth\OtpzVerificationController;
+use App\Http\Controllers\Auth\OtpzController;
 
 Route::middleware('guest')->group(function () {
-    // Login routes
-    Route::get('login', [OtpzLoginController::class, 'create'])
-        ->name('login');
-    Route::post('login', [OtpzLoginController::class, 'store']);
-
-    // OTP verification routes
-    Route::get('otpz/{id}', [OtpzVerificationController::class, 'show'])
+    Route::get('otpz', [OtpzController::class, 'index'])
+        ->name('otpz.index');
+    Route::post('otpz', [OtpzController::class, 'store'])
+        ->name('otpz.store');
+    Route::get('otpz/{id}', [OtpzController::class, 'show'])
         ->name('otpz.get')
         ->middleware('signed');
-    Route::post('otpz/{id}', [OtpzVerificationController::class, 'store'])
-        ->name('otpz.post')
+    Route::post('otpz/{id}', [OtpzController::class, 'verify'])
+        ->name('otpz.verify')
         ->middleware('signed');
 });
 ```
 
-That's it! The controllers handle all the OTP logic for you.
+That's it! The controller handles all the OTP logic for you.
 
 ---
 
@@ -131,8 +127,7 @@ npx shadcn@latest add https://benbjurstrom.github.io/otpz/r/vue.json
 This installs:
 - `resources/js/pages/auth/OtpzLogin.vue` - Email entry page
 - `resources/js/pages/auth/OtpzVerify.vue` - OTP code entry page
-- `app/Http/Controllers/Auth/OtpzLoginController.php` - Handles email entry and OTP sending
-- `app/Http/Controllers/Auth/OtpzVerificationController.php` - Handles OTP verification
+- `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
 
 > **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
 
@@ -141,26 +136,23 @@ This installs:
 Add to `routes/web.php`:
 
 ```php
-use App\Http\Controllers\Auth\OtpzLoginController;
-use App\Http\Controllers\Auth\OtpzVerificationController;
+use App\Http\Controllers\Auth\OtpzController;
 
 Route::middleware('guest')->group(function () {
-    // Login routes
-    Route::get('login', [OtpzLoginController::class, 'create'])
-        ->name('login');
-    Route::post('login', [OtpzLoginController::class, 'store']);
-
-    // OTP verification routes
-    Route::get('otpz/{id}', [OtpzVerificationController::class, 'show'])
+    Route::get('otpz', [OtpzController::class, 'index'])
+        ->name('otpz.index');
+    Route::post('otpz', [OtpzController::class, 'store'])
+        ->name('otpz.store');
+    Route::get('otpz/{id}', [OtpzController::class, 'show'])
         ->name('otpz.get')
         ->middleware('signed');
-    Route::post('otpz/{id}', [OtpzVerificationController::class, 'store'])
-        ->name('otpz.post')
+    Route::post('otpz/{id}', [OtpzController::class, 'verify'])
+        ->name('otpz.verify')
         ->middleware('signed');
 });
 ```
 
-That's it! The controllers handle all the OTP logic for you.
+That's it! The controller handles all the OTP logic for you.
 
 ---
 

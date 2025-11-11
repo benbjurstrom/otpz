@@ -3,23 +3,32 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use BenBjurstrom\Otpz\Actions\AttemptOtp;
 use BenBjurstrom\Otpz\Actions\SendOtp;
+use BenBjurstrom\Otpz\Enums\OtpStatus;
+use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;
 use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
+use BenBjurstrom\Otpz\Http\Requests\OtpRequest;
+use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Str;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
-class OtpzLoginController extends Controller
+class OtpzController extends Controller
 {
     /**
      * Display the OTP login form where users enter their email.
      */
-    public function create(Request $request): Response
+    public function index(Request $request): Response
     {
         return Inertia::render('auth/OtpzLogin', [
             'status' => $request->session()->get('status'),
@@ -54,6 +63,65 @@ class OtpzLoginController extends Controller
         RateLimiter::clear($this->throttleKey($request));
 
         return Inertia::location($otp->url);
+    }
+
+    /**
+     * Display the OTP verification form where users enter their code.
+     */
+    public function show(Request $request, string $id): Response|RedirectResponse
+    {
+        if (! $request->hasValidSignature()) {
+            $message = OtpStatus::SIGNATURE->errorMessage();
+            Session::flash('status', __($message));
+
+            return redirect()->route('otpz.index');
+        }
+
+        if ($request->sessionId !== request()->session()->getId()) {
+            $message = OtpStatus::SESSION->errorMessage();
+            Session::flash('status', __($message));
+
+            return redirect()->route('otpz.index');
+        }
+
+        $otp = Otp::findOrFail($id);
+
+        $url = URL::temporarySignedRoute(
+            'otpz.verify',
+            now()->addMinutes(5),
+            [
+                'id' => $otp->id,
+                'sessionId' => request()->session()->getId(),
+            ],
+        );
+
+        return Inertia::render('auth/OtpzVerify', [
+            'email' => $otp->user->email,
+            'url' => $url,
+        ]);
+    }
+
+    /**
+     * Verify the OTP code and authenticate the user.
+     */
+    public function verify(OtpRequest $request, string $id): RedirectResponse
+    {
+        try {
+            $data = $request->safe()->only(['code', 'sessionId']);
+
+            $otp = (new AttemptOtp)->handle($id, $data['code'], $data['sessionId']);
+
+            Auth::loginUsingId($otp->user_id, $otp->remember);
+            Session::regenerate();
+
+            if (! $otp->user->hasVerifiedEmail()) {
+                $otp->user->markEmailAsVerified();
+            }
+
+            return redirect()->intended('/dashboard');
+        } catch (OtpAttemptException $e) {
+            throw ValidationException::withMessages(['code' => $e->getMessage()]);
+        }
     }
 
     /**
