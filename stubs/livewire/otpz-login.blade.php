@@ -33,7 +33,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             $otp = (new SendOtp)->handle($this->email, $this->remember);
         } catch (OtpThrottleException $e) {
             throw ValidationException::withMessages([
-                'form.email' => $e->getMessage(),
+                'email' => $e->getMessage(),
             ]);
         }
 
