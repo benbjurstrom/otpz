@@ -164,9 +164,9 @@ That's it! The controller handles all the OTP logic for you.
 php artisan vendor:publish --tag="otpz-livewire"
 ```
 
-This publishes:
-- `resources/views/livewire/pages/auth/otpz-login.blade.php` - Email entry page
-- `resources/views/livewire/pages/auth/otpz-verify.blade.php` - OTP code entry page
+This copies the following files to your application:
+- `resources/views/livewire/auth/otpz-login.blade.php` - Email entry page
+- `resources/views/livewire/auth/otpz-verify.blade.php` - OTP code entry page
 
 > **Note:** These Volt components use Flux UI components and layout components from the Laravel Livewire starter kit. If you're not using the starter kit, you may need to adjust the component markup and styling.
 
@@ -178,20 +178,18 @@ Add to `routes/web.php`:
 use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use Livewire\Volt\Volt;
 
-// Login page
-Volt::route('login', 'livewire.pages.auth.otpz-login')
-    ->middleware('guest')
-    ->name('login');
+Route::middleware('guest')->group(function () {
+    Volt::route('otpz', 'livewire.auth.otpz-login')
+        ->name('otpz.index');
 
-// OTP verification page
-Volt::route('otpz/{id}', 'livewire.pages.auth.otpz-verify')
-    ->middleware(['guest', 'signed'])
-    ->name('otpz.get');
+    Volt::route('otpz/{id}', 'livewire.auth.otpz-verify')
+        ->middleware('signed')
+        ->name('otpz.get');
 
-// OTP submission
-Route::post('otpz/{id}', PostOtpController::class)
-    ->middleware(['guest', 'signed'])
-    ->name('otpz.post');
+    Route::post('otpz/{id}', PostOtpController::class)
+        ->middleware('signed')
+        ->name('otpz.verify');
+});
 ```
 
 ---
