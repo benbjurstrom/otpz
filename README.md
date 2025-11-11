@@ -330,45 +330,6 @@ Update `config/otpz.php`:
 
 ---
 
-## Starter Kit Examples
-
-The following are complete working examples showing OTPz integrated with the Laravel starter kits. These are helpful references but not required—you can integrate OTPz into any Laravel application.
-
-### React Starter Kit
-A complete OTPz + React starter kit is available for reference or quick project setup.
-
-**Create new project:**
-```bash
-laravel new --using benbjurstrom/otpz-react-starter-kit my-app
-```
-
-**View the integration diff:**
-[Laravel React Starter Kit → OTPz React](https://github.com/laravel/react-starter-kit/compare/main...benbjurstrom:otpz-react-starter-kit:main)
-
-### Vue Starter Kit
-A complete OTPz + Vue starter kit is available for reference or quick project setup.
-
-**Create new project:**
-```bash
-laravel new --using benbjurstrom/otpz-vue-starter-kit my-app
-```
-
-**View the integration diff:**
-[Laravel Vue Starter Kit → OTPz Vue](https://github.com/laravel/vue-starter-kit/compare/main...benbjurstrom:otpz-vue-starter-kit:main)
-
-### Livewire Starter Kit
-A complete OTPz + Livewire starter kit is available for reference or quick project setup.
-
-**Create new project:**
-```bash
-laravel new --using benbjurstrom/otpz-livewire-starter-kit my-app
-```
-
-**View the integration diff:**
-[Laravel Livewire Starter Kit → OTPz Livewire](https://github.com/laravel/livewire-starter-kit/compare/main...benbjurstrom:otpz-livewire-starter-kit:main)
-
----
-
 ## How It Works
 
 ### Security Features
