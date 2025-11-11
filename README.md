@@ -28,12 +28,12 @@ This package provides secure first factor one-time passwords (OTPs) for Laravel 
 
 ### Prerequisites
 
-OTPz requires one of the official [Laravel Breeze starter kits](https://laravel.com/docs/starter-kits#laravel-breeze):
-- Laravel Breeze with **React** (Inertia.js)
-- Laravel Breeze with **Vue** (Inertia.js)
-- Laravel Breeze with **Livewire** (Volt)
+OTPz works best with the official [Laravel starter kits](https://laravel.com/starter-kits):
+- **React** (Inertia.js)
+- **Vue** (Inertia.js)
+- **Livewire** (Volt)
 
-> **Note:** OTPz components are designed to work with the official Laravel Breeze starter kits and use their existing UI components (Button, Input, Label, etc.). For reference implementations, see the [starter kit diffs](#starter-kit-reference).
+> **Note:** OTPz frontend components are designed to work out of the box with the Laravel starter kits and use their existing UI components (Button, Input, Label, etc.). You can also install and customize these components for any Laravel application using React, Vue, or Livewire, but you may need to adjust component imports and styling. For reference implementations with the starter kits, see the [starter kit examples](#starter-kit-examples).
 
 ---
 
@@ -89,6 +89,8 @@ This installs:
 - `resources/js/pages/auth/otpz-verify.tsx` - OTP code entry page
 - `app/Http/Controllers/Auth/OtpzController.php` - Backend controller
 
+> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+
 #### 2. Add Routes
 
 Add to `routes/web.php`:
@@ -142,6 +144,8 @@ This installs:
 - `resources/js/pages/auth/OtpzVerify.vue` - OTP code entry page
 - `app/Http/Controllers/Auth/OtpzController.php` - Backend controller
 
+> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`) and layout components (`AuthLayout`) from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+
 #### 2. Add Routes
 
 Add to `routes/web.php`:
@@ -194,18 +198,31 @@ This publishes:
 - `resources/views/livewire/pages/auth/otpz-login.blade.php` - Email entry page
 - `resources/views/livewire/pages/auth/otpz-verify.blade.php` - OTP code entry page
 
+> **Note:** These Volt components use Flux UI components and layout components from the Laravel Livewire starter kit. If you're not using the starter kit, you may need to adjust the component markup and styling.
+
 #### 2. Add Routes
 
-The OTP verification route is already provided by the package. You only need to ensure your login page route uses the published Volt component:
+Add to `routes/web.php`:
 
 ```php
-// In your routes/web.php
+use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
+use Livewire\Volt\Volt;
+
+// Login page
 Volt::route('login', 'livewire.pages.auth.otpz-login')
     ->middleware('guest')
     ->name('login');
-```
 
-The package provides the `PostOtpController` for handling OTP submissions, so no additional controller setup is needed.
+// OTP verification page
+Volt::route('otpz/{id}', 'livewire.pages.auth.otpz-verify')
+    ->middleware(['guest', 'signed'])
+    ->name('otpz.get');
+
+// OTP submission
+Route::post('otpz/{id}', PostOtpController::class)
+    ->middleware(['guest', 'signed'])
+    ->name('otpz.post');
+```
 
 ---
 
@@ -301,33 +318,42 @@ Update `config/otpz.php`:
 
 ---
 
-## Starter Kit Reference
+## Starter Kit Examples
 
-For complete integration examples with Laravel Breeze, see these diffs showing all required changes:
+The following are complete working examples showing OTPz integrated with the Laravel starter kits. These are helpful references but not required—you can integrate OTPz into any Laravel application.
 
 ### React Starter Kit
-View the complete diff: [Laravel React Starter Kit → OTPz React](https://github.com/laravel/react-starter-kit/compare/main...benbjurstrom:otpz-react-starter-kit:main)
+A complete OTPz + React starter kit is available for reference or quick project setup.
 
 **Create new project:**
 ```bash
 laravel new --using benbjurstrom/otpz-react-starter-kit my-app
 ```
 
+**View the integration diff:**
+[Laravel React Starter Kit → OTPz React](https://github.com/laravel/react-starter-kit/compare/main...benbjurstrom:otpz-react-starter-kit:main)
+
 ### Vue Starter Kit
-View the complete diff: [Laravel Vue Starter Kit → OTPz Vue](https://github.com/laravel/vue-starter-kit/compare/main...benbjurstrom:otpz-vue-starter-kit:main)
+A complete OTPz + Vue starter kit is available for reference or quick project setup.
 
 **Create new project:**
 ```bash
 laravel new --using benbjurstrom/otpz-vue-starter-kit my-app
 ```
 
+**View the integration diff:**
+[Laravel Vue Starter Kit → OTPz Vue](https://github.com/laravel/vue-starter-kit/compare/main...benbjurstrom:otpz-vue-starter-kit:main)
+
 ### Livewire Starter Kit
-View the complete diff: [Laravel Livewire Starter Kit → OTPz Livewire](https://github.com/laravel/livewire-starter-kit/compare/main...benbjurstrom:otpz-livewire-starter-kit:main)
+A complete OTPz + Livewire starter kit is available for reference or quick project setup.
 
 **Create new project:**
 ```bash
 laravel new --using benbjurstrom/otpz-livewire-starter-kit my-app
 ```
+
+**View the integration diff:**
+[Laravel Livewire Starter Kit → OTPz Livewire](https://github.com/laravel/livewire-starter-kit/compare/main...benbjurstrom:otpz-livewire-starter-kit:main)
 
 ---
 

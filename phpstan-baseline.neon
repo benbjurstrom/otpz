@@ -8,11 +8,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable&Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$email\\.$#"
 			count: 1
-			path: src/Http/Controllers/GetOtpController.php
-
-		-
-			message: "#^Access to an undefined property BenBjurstrom\\\\Otpz\\\\Models\\\\Concerns\\\\Otpable&Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$email\\.$#"
-			count: 1
 			path: src/Mail/OtpzMail.php
 
 		-
