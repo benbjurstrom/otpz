@@ -36,7 +36,7 @@
       "title": "OTPz Authentication (Vue)",
       "description": "Complete passwordless OTP authentication with self-contained controllers for Vue and Inertia.js",
       "author": "Ben Bjurstrom <ben@benbjurstrom.com>",
-      "registryDependencies": ["button", "input", "label", "checkbox"],
+      "registryDependencies": [],
       "dependencies": ["@inertiajs/vue3", "lucide-vue-next"],
       "files": [
         {

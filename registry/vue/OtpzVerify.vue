@@ -8,6 +8,7 @@ import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { watch } from 'vue';
+import { index } from '@/routes/otpz';
 
 defineProps<{
     status?: string;
@@ -91,7 +92,7 @@ const submit = () => {
 
             <div class="text-center text-sm text-muted-foreground">
                 Didn't receive it?
-                <TextLink :href="route('login')" :tabindex="5">Request a new code</TextLink>
+                <TextLink :href="index.url()" :tabindex="5">Request a new code</TextLink>
             </div>
         </form>
     </AuthBase>
