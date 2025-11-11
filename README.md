@@ -104,7 +104,7 @@ Route::middleware('guest')->group(function () {
     Route::post('otpz', [OtpzController::class, 'store'])
         ->name('otpz.store');
     Route::get('otpz/{id}', [OtpzController::class, 'show'])
-        ->name('otpz.get')
+        ->name('otpz.show')
         ->middleware('signed');
     Route::post('otpz/{id}', [OtpzController::class, 'verify'])
         ->name('otpz.verify')
@@ -144,7 +144,7 @@ Route::middleware('guest')->group(function () {
     Route::post('otpz', [OtpzController::class, 'store'])
         ->name('otpz.store');
     Route::get('otpz/{id}', [OtpzController::class, 'show'])
-        ->name('otpz.get')
+        ->name('otpz.show')
         ->middleware('signed');
     Route::post('otpz/{id}', [OtpzController::class, 'verify'])
         ->name('otpz.verify')
@@ -185,7 +185,7 @@ Route::middleware('guest')->group(function () {
 
     Volt::route('otpz/{id}', 'auth.otpz-verify')
         ->middleware('signed')
-        ->name('otpz.get');
+        ->name('otpz.show');
 
     Route::post('otpz/{id}', PostOtpController::class)
         ->middleware('signed')

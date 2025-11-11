@@ -42,9 +42,9 @@ class TestCase extends Orchestra
         // Register test routes for OTP URL generation
         Route::get('otpz/{id}', function () {
             return response('OTP page');
-        })->name('otpz.get')->middleware('signed');
+        })->name('otpz.show')->middleware('signed');
 
         Route::post('otpz/{id}', PostOtpController::class)
-            ->name('otpz.post')->middleware('signed');
+            ->name('otpz.verify')->middleware('signed');
     }
 }
