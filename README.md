@@ -301,20 +301,31 @@ Switch between templates in `config/otpz.php`:
 
 ### Custom User Resolution
 
-By default, OTPz creates new users when an email doesn't exist. Customize this behavior:
+By default, OTPz creates new users when an email doesn't exist. You can customize this behavior by creating your own user resolver and registering it in the config. In this example we throw a validation error if a user with the given email address does not exist.
 
 ```php
-// Create your own resolver
 namespace App\Actions;
 
-use BenBjurstrom\Otpz\Contracts\UserResolver;
+use App\Models\User;
+use BenBjurstrom\Otpz\Models\Concerns\Otpable;
+use Illuminate\Validation\ValidationException;
 
-class MyUserResolver implements UserResolver
+/**
+ * @method static Otpable run(string $email)
+ */
+class MyUserResolver
 {
-    public function resolve(string $email): ?\Illuminate\Contracts\Auth\Authenticatable
+    public function handle(string $email): Otpable
     {
-        // Your custom logic
-        return User::where('email', $email)->firstOrFail();
+        $user = User::where('email', $email)->first();
+
+        if($user){
+            return $user;
+        }
+
+        throw ValidationException::withMessages([
+            'email' => 'No user found with that email address.',
+        ]);
     }
 }
 ```
