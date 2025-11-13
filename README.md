@@ -310,9 +310,6 @@ use App\Models\User;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
 use Illuminate\Validation\ValidationException;
 
-/**
- * @method static Otpable run(string $email)
- */
 class MyUserResolver
 {
     public function handle(string $email): Otpable
