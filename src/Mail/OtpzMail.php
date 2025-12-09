@@ -38,8 +38,9 @@ class OtpzMail extends Mailable
     {
         $email = $this->otp->user->email;
 
-        // Format the code with hyphens for readability
-        $formattedCode = substr_replace($this->code, '-', 5, 0);
+        // Format the code with hyphen in the middle for readability
+        $midpoint = (int) (strlen($this->code) / 2);
+        $formattedCode = substr_replace($this->code, '-', $midpoint, 0);
 
         $template = config('otpz.template', 'otpz::mail.otpz');
 

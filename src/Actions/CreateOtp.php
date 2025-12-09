@@ -84,8 +84,9 @@ class CreateOtp
     private function createOtp(Otpable $user, bool $remember): array
     {
         return DB::transaction(function () use ($user, $remember) {
-            // Generate a secure 9-digit OTP code
-            $code = Str::upper(Str::random(10));
+            // Generate a secure OTP code
+            $length = config('otpz.code_length', 10);
+            $code = Str::upper(Str::random($length));
             $code = str_replace('O', '0', $code);
 
             // Invalidate existing active OTPs

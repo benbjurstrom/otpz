@@ -14,6 +14,8 @@ return [
 
     'expiration' => 5, // Minutes
 
+    'code_length' => 10, // Characters (displayed with hyphen in middle, e.g., 10 = XXXXX-XXXXX)
+
     'limits' => [
         ['limit' => 1, 'minutes' => 1],
         ['limit' => 3, 'minutes' => 5],
