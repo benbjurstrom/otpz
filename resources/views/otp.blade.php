@@ -34,12 +34,12 @@
     </head>
 
     <body
-        class="dark min-h-screen flex flex-col items-center justify-center bg-white antialiased dark:bg-zinc-900"
+        class="dark flex min-h-screen flex-col items-center justify-center bg-white antialiased dark:bg-zinc-900"
     >
         <div class="flex w-full max-w-md flex-col items-center space-y-6 px-6">
             <div class="flex justify-center opacity-50">
                 <a href="/" class="group flex items-center gap-3">
-                    @if(View::exists('components.application-logo'))
+                    @if (View::exists('components.application-logo'))
                         <x-application-logo
                             class="h-20 w-20 fill-current text-zinc-800 dark:text-zinc-400"
                         />
@@ -50,9 +50,12 @@
             <div
                 class="mb-2 text-center text-2xl font-medium text-zinc-800 dark:text-white"
             >
-                {{ __('otpz::otp.views.otp.title') }} {{ config('app.name') }}
+                Sign-in to {{ config('app.name') }}
                 <div class="mt-2 text-sm text-zinc-500 dark:text-white/70">
-                    {{ __('otpz::otp.views.otp.description') }}
+                    Enter the alpha numeric code sent to
+                    <span class="font-semibold">test@example.com</span>
+                    . The code is case insensitive and dashes will be added
+                    automatically.
                 </div>
             </div>
 
@@ -117,7 +120,7 @@
                     type="submit"
                     class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-zinc-800 px-4 text-sm font-medium text-white hover:bg-zinc-900 disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 dark:bg-white dark:text-zinc-800 dark:shadow-none dark:hover:bg-zinc-100 dark:disabled:opacity-75"
                 >
-                    {{__('otpz::otp.views.otp.submit')}}
+                    Submit Code
                 </button>
 
                 <div class="flex w-full items-center" role="none">
@@ -128,7 +131,7 @@
                     <span
                         class="mx-6 shrink whitespace-nowrap text-sm font-medium text-zinc-500 dark:text-zinc-300"
                     >
-                        {{ __('otpz::otp.views.otp.or') }}
+                        or
                     </span>
 
                     <div
@@ -141,7 +144,7 @@
                         class="inline text-sm font-medium text-inherit text-zinc-500 no-underline decoration-zinc-800/20 underline-offset-[6px] hover:text-zinc-800 hover:decoration-current dark:text-white/70 dark:decoration-white/20 dark:hover:text-white"
                         href="{{ route('login') }}"
                     >
-                       {{ __('otpz::otp.views.otp.back') }}
+                        Request a new code
                     </a>
                 </div>
             </form>

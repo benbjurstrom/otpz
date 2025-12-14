@@ -1,27 +1,30 @@
 <x-mail::message>
-{{-- Greeting --}}
-# {{ __('otpz::otp.mail.notification.greeting') }}
+    {{-- Greeting --}}
+    # Hello!
 
-{{-- Intro Lines --}}
-{{ __('otpz::otp.mail.notification.intro') }}
+    {{-- Intro Lines --}}
+    Click the button below to securely log in to your account:
 
-{{-- Action Button --}}
-<x-mail::button :url="$url">
-{{ __('otpz::otp.mail.notification.action') }} {{ config('app.name') }}
-</x-mail::button>
+    {{-- Action Button --}}
+    <x-mail::button :url="$url">
+        Sign-In to {{ config('app.name') }}
+    </x-mail::button>
 
-{{-- Outro Lines --}}
-{{ __('otpz::otp.mail.notification.outro') }}
+    {{-- Outro Lines --}}
+    This link expires after 5 minutes and can only be used once.
 
-{{-- Salutation --}}
-{{ __('otpz::otp.mail.notification.salutation') }} {{ config('app.name') }}!
+    {{-- Salutation --}}
+    Thank you for using {{ config('app.name') }}!
 
-{{-- Subcopy --}}
-<x-slot:subcopy>
-    {{ __('otpz::otp.mail.notification.subcopy', [
-        'actionText' => 'Sign-In to ' .  config('app.name'),
-    ]) }}
-
-<span class="break-all">[{{ $url }}]({{ $url }})</span>
-</x-slot:subcopy>
+    {{-- Subcopy --}}
+    <x-slot:subcopy>
+        @lang(
+            "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n" .
+            'into your web browser:',
+            [
+                'actionText' => 'Sign-In to ' . config('app.name'),
+            ]
+        )
+        <span class="break-all">[{{ $url }}]({{ $url }})</span>
+    </x-slot>
 </x-mail::message>
