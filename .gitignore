@@ -30,9 +30,13 @@ phpstan.neon
 testbench.yaml
 /docs
 /coverage
+/public
 
 .prettierrc
 .prettierignore
 pnpm-lock.yaml
 package.json
 tailwind.config.js
+
+.claude
+CLAUDE.md

@@ -2,9 +2,8 @@
 
 namespace BenBjurstrom\Otpz\Tests;
 
-use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
-use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\OtpzServiceProvider;
+use BenBjurstrom\Otpz\Tests\Support\Controllers\PostOtpController;
 use BenBjurstrom\Otpz\Tests\Support\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Route;
@@ -40,10 +39,12 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/create_otps_table.php.stub';
         $migration->up();
 
-        Route::get('otpz/{id}', GetOtpController::class)
-            ->name('otpz.show')->middleware('guest');
+        // Register test routes for OTP URL generation
+        Route::get('otpz/{id}', function () {
+            return response('OTP page');
+        })->name('otpz.show')->middleware('signed');
 
         Route::post('otpz/{id}', PostOtpController::class)
-            ->name('otpz.post')->middleware('guest');
+            ->name('otpz.verify')->middleware('signed');
     }
 }

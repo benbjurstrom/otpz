@@ -1,6 +1,6 @@
 <?php
 
-namespace BenBjurstrom\Otpz\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use BenBjurstrom\Otpz\Actions\AttemptOtp;
 use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;

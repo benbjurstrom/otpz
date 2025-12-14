@@ -6,135 +6,243 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/benbjurstrom/otpz.svg?style=flat-square)](https://packagist.org/packages/benbjurstrom/otpz)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/benbjurstrom/otpz/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/benbjurstrom/otpz/actions?query=workflow%3A\"Fix+PHP+code+style+issues\"+branch%3Amain)
 
-This package provides secure first factor one-time passwords (OTPs) for Laravel applications. Users enter their email and receive a one-time code to sign in.
+This package provides secure first factor one-time passwords (OTPs) for Laravel applications. Users enter their email and receive a one-time code to sign in—no passwords required.
 
-- ✅ Rate-limited
-- ✅ Configurable expiration
-- ✅ Invalidated after first use
-- ✅ Locked to the user's session
-- ✅ Invalidated after too many failed attempts
-- ✅ Detailed error messages
-- ✅ Customizable mail template
-- ✅ Auditable logs
+## Features
 
-## Starter Kits
+- ✅ **Session-locked** - OTPs only work in the browser session that requested them
+- ✅ **Rate-limited** - Configurable throttling with multi-tier limits
+- ✅ **Time-based expiration** - Default 5 minutes, fully configurable
+- ✅ **Invalidated after first use** - One-time use only
+- ✅ **Attempt limiting** - Invalidated after 3 failed attempts
+- ✅ **Signed URLs** - Cryptographic signature validation
+- ✅ **Detailed error messages** - Clear feedback for users
+- ✅ **Customizable templates** - Bring your own email design
+- ✅ **Auditable** - Full event logging via Laravel events
 
-### Laravel + React Starter Kit
+---
 
-1. **New Applications**
+## Quick Start
 
-    Create a new Laravel project using the OTPz + React starter kit with the following command:
-    ```bash
-    laravel new --using benbjurstrom/otpz-react-starter-kit otpz-react
-    ```
+### Prerequisites
 
- 2. **Existing Applications**:
+OTPz works best with the official [Laravel starter kits](https://laravel.com/starter-kits):
+- **React** (Inertia.js)
+- **Vue** (Inertia.js)
+- **Livewire** (Volt)
 
-    You can see a diff of all changes needed to integrate OTPz with the official Laravel + React Starter Kit here: https://github.com/laravel/react-starter-kit/compare/main...benbjurstrom:otpz-react-starter-kit:main
+> OTPz's frontend components are designed to work out of the box with the Laravel starter kits and make use of their existing UI components (Button, Input, Label, etc.). Because these components are installed into your application you are free to customize them for any Laravel application using React, Vue, or Livewire.
 
-### Laravel + Vue Starter Kit
-
-1. **New Applications**
-
-    Create a new Laravel project using the OTPz + Vue starter kit with the following command:
-    ```bash
-    laravel new --using benbjurstrom/otpz-vue-starter-kit otpz-vue
-    ```
-
- 2. **Existing Applications**:
-
-    You can see a diff of all changes needed to integrate OTPz with the official Laravel + Vue Starter Kit here: https://github.com/laravel/vue-starter-kit/compare/main...benbjurstrom:otpz-vue-starter-kit:main
-
-### Laravel + Livewire Starter Kit
-
-1. **New Applications**
-
-    Create a new Laravel project using the OTPz + Livewire starter kit with the following command:
-    ```bash
-    laravel new --using benbjurstrom/otpz-livewire-starter-kit otpz-livewire
-    ```
-
- 2. **Existing Applications**:
-
-    You can see a diff of all changes needed to integrate OTPz with the official Laravel + Livewire Starter Kit here: https://github.com/laravel/livewire-starter-kit/compare/main...benbjurstrom:otpz-livewire-starter-kit:main
+---
 
 ## Installation
 
-### 1. Install the package via composer:
+### 1. Install the Package
 
 ```bash
 composer require benbjurstrom/otpz
 ```
 
-### 2. Publish and run the migrations
+### 2. Run Migrations
 
 ```bash
 php artisan vendor:publish --tag="otpz-migrations"
 php artisan migrate
 ```
 
-### 3. Add the package's interface and trait to your Authenticatable model
+### 3. Add Interface and Trait to User Model
 
 ```php
 // app/Models/User.php
 namespace App\Models;
 
-//...
 use BenBjurstrom\Otpz\Models\Concerns\HasOtps;
 use BenBjurstrom\Otpz\Models\Concerns\Otpable;
+// ...
 
 class User extends Authenticatable implements Otpable
 {
     use HasFactory, Notifiable, HasOtps;
-    
+
     // ...
 }
 ```
 
-### 4. (Optional) Add the following routes
-Not needed with Laravel 12 starter kits. Instead, see the [Usage](#usage) section for examples.
+---
+
+## Framework-Specific Setup
+
+Choose your frontend framework:
+
+### React (Inertia.js)
+
+#### 1. Publish Components
+
+```bash
+php artisan vendor:publish --tag="otpz-react"
+```
+
+This copies the following files to your application:
+- `resources/js/pages/auth/otpz-login.tsx` - Email entry page
+- `resources/js/pages/auth/otpz-verify.tsx` - OTP code entry page
+- `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
+
+> **Note:** These components import shadcn/ui components (`Button`, `Input`, `Label`, `Checkbox`), layout components (`AuthLayout`), and use wayfinder for route generation from the Laravel React starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+
+#### 2. Add Routes
+
+Add to `routes/web.php`:
 
 ```php
-// routes/auth.php
-use BenBjurstrom\Otpz\Http\Controllers\GetOtpController;
-use BenBjurstrom\Otpz\Http\Controllers\PostOtpController;
-//...
-Route::get('otpz/{id}', GetOtpController::class)
-    ->name('otpz.show')->middleware('guest');
+use App\Http\Controllers\Auth\OtpzController;
 
-Route::post('otpz/{id}', PostOtpController::class)
-    ->name('otpz.post')->middleware('guest');
+Route::middleware('guest')->group(function () {
+    Route::get('otpz', [OtpzController::class, 'index'])
+        ->name('otpz.index');
+    Route::post('otpz', [OtpzController::class, 'store'])
+        ->name('otpz.store');
+    Route::get('otpz/{id}', [OtpzController::class, 'show'])
+        ->name('otpz.show')
+        ->middleware('signed');
+    Route::post('otpz/{id}', [OtpzController::class, 'verify'])
+        ->name('otpz.verify')
+        ->middleware('signed');
+});
 ```
 
-### 5. (Optional) Publish the views for custom styling
+That's it! The controller handles all the OTP logic for you.
+
+---
+
+### Vue (Inertia.js)
+
+#### 1. Publish Components
 
 ```bash
-php artisan vendor:publish --tag="otpz-views"
+php artisan vendor:publish --tag="otpz-vue"
 ```
 
-This package publishes the following views:
+This copies the following files to your application:
+- `resources/js/pages/auth/OtpzLogin.vue` - Email entry page
+- `resources/js/pages/auth/OtpzVerify.vue` - OTP code entry page
+- `app/Http/Controllers/Auth/OtpzController.php` - Self-contained controller handling all OTP logic
+
+> **Note:** These components import layout components (`AuthLayout`), and use wayfinder for route generation from the Laravel Vue starter kit. If you're not using the starter kit, you may need to adjust these imports or create these components.
+
+#### 2. Add Routes
+
+Add to `routes/web.php`:
+
+```php
+use App\Http\Controllers\Auth\OtpzController;
+
+Route::middleware('guest')->group(function () {
+    Route::get('otpz', [OtpzController::class, 'index'])
+        ->name('otpz.index');
+    Route::post('otpz', [OtpzController::class, 'store'])
+        ->name('otpz.store');
+    Route::get('otpz/{id}', [OtpzController::class, 'show'])
+        ->name('otpz.show')
+        ->middleware('signed');
+    Route::post('otpz/{id}', [OtpzController::class, 'verify'])
+        ->name('otpz.verify')
+        ->middleware('signed');
+});
+```
+
+That's it! The controller handles all the OTP logic for you.
+
+---
+
+### Livewire (Volt)
+
+#### 1. Publish Components
+
 ```bash
-resources/
-└── views/
-    └── vendor/
-        └── otpz/
-            ├── otp.blade.php               (for entering the OTP)
-            ├── components/template.blade.php
-            └── mail/
-                ├── notification.blade.php  (standard template)
-                └── otpz.blade.php          (custom template)
+php artisan vendor:publish --tag="otpz-livewire"
 ```
 
-### 6. (Optional) Publish the config file
+This copies the following files to your application:
+- `resources/views/livewire/auth/otpz-login.blade.php` - Email entry page
+- `resources/views/livewire/auth/otpz-verify.blade.php` - OTP code entry page
+- `app/Http/Controllers/Auth/PostOtpController.php` - Self-contained controller handling OTP verification
+
+> **Note:** These Volt components use Flux UI components and layout components from the Laravel Livewire starter kit. If you're not using the starter kit, you may need to adjust the component markup and styling.
+
+#### 2. Add Routes
+
+Add to `routes/web.php`:
+
+```php
+use App\Http\Controllers\Auth\PostOtpController;
+use Livewire\Volt\Volt;
+
+Route::middleware('guest')->group(function () {
+    Volt::route('otpz', 'auth.otpz-login')
+        ->name('otpz.index');
+
+    Volt::route('otpz/{id}', 'auth.otpz-verify')
+        ->middleware('signed')
+        ->name('otpz.show');
+
+    Route::post('otpz/{id}', PostOtpController::class)
+        ->middleware('signed')
+        ->name('otpz.verify');
+});
+```
+
+---
+
+## Replacing Fortify Login (Optional)
+
+The latest Laravel starter kits use [Laravel Fortify](https://laravel.com/docs/12.x/fortify) for authentication. If you want to replace the default username/password login with OTPz:
+
+**For React:**
+
+In `app/Providers/FortifyServiceProvider.php`, update the `loginView` method:
+
+```php
+Fortify::loginView(fn (Request $request) => Inertia::render('auth/otpz-login', []));
+```
+
+**For Vue:**
+
+In `app/Providers/FortifyServiceProvider.php`, update the `loginView` method:
+
+```php
+Fortify::loginView(fn (Request $request) => Inertia::render('auth/OtpzLogin', []));
+```
+
+**For Livewire:**
+
+In `app/Providers/FortifyServiceProvider.php`, comment out the default login view:
+
+```php
+// Fortify::loginView(fn () => view('livewire.auth.login'));
+```
+
+Then in `routes/web.php`, update the OTPz route to use `login`:
+
+```php
+Volt::route('login', 'auth.otpz-login')
+    ->name('login'); // Changed path and name from 'otpz'
+```
+
+Now when users visit `/login` or are redirected to the login page, they'll see the OTPz email entry form instead of the traditional username/password form.
+
+---
+
+## Configuration
+
+### Publish Configuration File (Optional)
 
 ```bash
 php artisan vendor:publish --tag="otpz-config"
 ```
 
 This is the contents of the published config file:
-
 ```php
 <?php
 
@@ -229,119 +337,75 @@ lang/
 ```
 
 
-## Usage With Breeze
+---
 
-### Laravel Breeze Livewire Example
-1. Replace the Breeze provided [App\Livewire\Forms\LoginForm::authenticate](https://github.com/laravel/breeze/blob/2.x/stubs/livewire-common/app/Livewire/Forms/LoginForm.php#L29C6-L29C41) method with a sendEmail method that runs the SendOtp action. Also be sure to remove password from the LoginForm's properties.
+## Customization
 
-```php
-    // app/Livewire/Forms/LoginForm.php
-    
-    use BenBjurstrom\Otpz\Actions\SendOtp;
-    use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
-    use BenBjurstrom\Otpz\Models\Otp;
-    //...
-    
-    #[Validate('required|string|email')]
-    public string $email = '';
+### Email Templates
 
-    #[Validate('boolean')]
-    public bool $remember = false;
-    //...
-    
-    public function sendEmail(): Otp
-    {
-        $this->validate();
+Publish the email templates to customize styling:
 
-        $this->ensureIsNotRateLimited();
-        RateLimiter::hit($this->throttleKey(), 300);
-
-        try {
-            $otp = (new SendOtp)->handle($this->email, $this->remember);
-        } catch (OtpThrottleException $e) {
-            throw ValidationException::withMessages([
-                'form.email' => $e->getMessage(),
-            ]);
-        }
-
-        RateLimiter::clear($this->throttleKey());
-        
-        return $otp;
-    }
-````
-
-2. Update [resources/views/livewire/pages/auth/login.blade.php](https://github.com/laravel/breeze/blob/2.x/stubs/livewire/resources/views/livewire/pages/auth/login.blade.php) such that the login function calls our new sendEmail method and redirects to the OTP entry page. You can also remove the password input field in this same file.
-
-```php
-    public function login(): void
-    {
-        $this->validate();
-    
-        $otp = $this->form->sendEmail();
-        
-        $this->redirect($otp->url);
-    }
-``` 
-
-### Laravel Breeze Inertia Example
-
-1. Replace the Breeze provided [App\Http\Requests\Auth\LoginRequest::authenticate](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/default/app/Http/Requests/Auth/LoginRequest.php) method with a sendEmail method that runs the SendOtp action. Also be sure to remove password from the rules array.
-
-```php
-    // app/Http/Requests/Auth/LoginRequest.php
-
-    use BenBjurstrom\Otpz\Actions\SendOtp;
-    use BenBjurstrom\Otpz\Exceptions\OtpThrottleException;
-    use BenBjurstrom\Otpz\Models\Otp;
-    //...
-    
-    public function rules(): array
-    {
-        return [
-            'email' => ['required', 'string', 'email']
-        ];
-    }
-    //...
-    
-    public function sendEmail(): Otp
-    {
-        $this->ensureIsNotRateLimited();
-        RateLimiter::hit($this->throttleKey(), 300);
-
-        try {
-            $otp = (new SendOtp)->handle($this->email, $this->remember);
-        } catch (OtpThrottleException $e) {
-            throw ValidationException::withMessages([
-                'email' => $e->getMessage(),
-            ]);
-        }
-
-        RateLimiter::clear($this->throttleKey());
-
-        return $otp;
-    }
+```bash
+php artisan vendor:publish --tag="otpz-views"
 ```
 
-2. Update the [App\Http\Controllers\Auth\AuthenticatedSessionController::store](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/inertia-common/app/Http/Controllers/Auth/AuthenticatedSessionController.php) method to call our new sendEmail method and redirect to the OTP entry page.
-
-```php
-    public function store(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
-    {
-        $otp = $request->sendEmail();
-
-        return Inertia::location($otp->url);
-    }
+This publishes:
+```
+resources/views/vendor/otpz/
+├── mail/
+│   ├── otpz.blade.php          # Custom styled template
+│   └── notification.blade.php  # Laravel notification template
+└── components/
+    └── template.blade.php
 ```
 
-3. Remove the password input field from the [resources/js/Pages/Auth/Login.vue](https://github.com/laravel/breeze/blob/e05ae1a21954c8d83bb0fcc78db87f157c16ac6c/stubs/inertia-vue/resources/js/Pages/Auth/Login.vue) file.
+Switch between templates in `config/otpz.php`:
+```php
+'template' => 'otpz::mail.notification', // Use Laravel's default styling
+```
 
-Everything else is handled by the package components.
+### Custom User Resolution
+
+By default, OTPz creates new users when an email doesn't exist. You can customize this behavior by creating your own user resolver and registering it in the config. In this example we throw a validation error if a user with the given email address does not exist.
+
+```php
+namespace App\Actions;
+
+use App\Models\User;
+use BenBjurstrom\Otpz\Models\Concerns\Otpable;
+use Illuminate\Validation\ValidationException;
+
+class MyUserResolver
+{
+    public function handle(string $email): Otpable
+    {
+        $user = User::where('email', $email)->first();
+
+        if($user){
+            return $user;
+        }
+
+        throw ValidationException::withMessages([
+            'email' => 'No user found with that email address.',
+        ]);
+    }
+}
+```
+
+Update `config/otpz.php`:
+```php
+'user_resolver' => App\Actions\MyUserResolver::class,
+```
+
+---
 
 ## Testing
 
 ```bash
 composer test
 ```
+
+---
 
 ## Changelog
 
