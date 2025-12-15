@@ -16,14 +16,14 @@ enum OtpStatus: int
     public function errorMessage(): string
     {
         return match ($this) {
-            self::ACTIVE => 'The code is still active.',
-            self::SUPERSEDED => 'The active code has been superseded. Please request a new code.',
-            self::EXPIRED => 'The active code has expired. Please request a new code.',
-            self::ATTEMPTED => 'Too many attempts. Please request a new code.',
-            self::USED => 'The active code has already been used. Please request a new code.',
-            self::INVALID => 'The given code is invalid.',
-            self::SIGNATURE => 'The route signature is invalid.',
-            self::SESSION => 'The sign-in code was requested in a different session. Please login using the same browser that requested the code.',
+            self::ACTIVE => __('otpz::otp.status.active'),
+            self::SUPERSEDED => __('otpz::otp.status.superseded'),
+            self::EXPIRED => __('otpz::otp.status.expired'),
+            self::ATTEMPTED => __('otpz::otp.status.attempted'),
+            self::USED => __('otpz::otp.status.used'),
+            self::INVALID => __('otpz::otp.status.invalid'),
+            self::SIGNATURE => __('otpz::otp.status.signature'),
+            self::SESSION => __('otpz::otp.status.session'),
         };
     }
 }

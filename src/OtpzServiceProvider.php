@@ -18,7 +18,8 @@ class OtpzServiceProvider extends PackageServiceProvider
             ->name('otpz')
             ->hasConfigFile()
             ->hasViews('otpz')
-            ->hasMigration('create_otps_table');
+            ->hasMigration('create_otps_table')
+            ->hasTranslations();
     }
 
     public function packageBooted(): void

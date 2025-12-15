@@ -321,6 +321,21 @@ return [
     'user_resolver' => BenBjurstrom\Otpz\Actions\GetUserFromEmail::class,
 ];
 ```
+### 7. (Optional) Publish the translations file
+
+```bash
+php artisan vendor:publish --tag="otpz-translations"
+```
+
+This package publishes the translations file:
+
+```bash
+lang/
+└── vendor/
+    └── en
+        └── otp.php          (standart translations)
+```
+
 
 ---
 
