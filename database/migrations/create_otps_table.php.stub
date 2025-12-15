@@ -15,7 +15,7 @@ return new class extends Migration
             $table->tinyInteger('attempts')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->boolean('remember')->default(false);
-            $table->ipAddress('ip_address');
+            $table->ipAddress('ip_address')->nullable();
             $table->timestamps();
         });
     }
