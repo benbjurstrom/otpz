@@ -22,8 +22,10 @@ class OtpRequest extends FormRequest
      */
     public function rules(): array
     {
+        $codeLength = config('otpz.code_length', 10);
+
         return [
-            'code' => ['required', 'string', 'size:10'],
+            'code' => ['required', 'string', 'size:'.$codeLength],
             'sessionId' => ['required', 'string'],
         ];
     }
