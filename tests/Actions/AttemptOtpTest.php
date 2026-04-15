@@ -5,6 +5,7 @@ use BenBjurstrom\Otpz\Enums\OtpStatus;
 use BenBjurstrom\Otpz\Exceptions\OtpAttemptException;
 use BenBjurstrom\Otpz\Models\Otp;
 use BenBjurstrom\Otpz\Tests\Support\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -99,7 +100,7 @@ it('throws exception for invalid code', function () {
 
 it('throws exception for non-existent otp', function () {
     expect(fn () => (new AttemptOtp)->handle(999, 'INVALIDCODE', 'test-session-id'))
-        ->toThrow(Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        ->toThrow(ModelNotFoundException::class);
 });
 
 it('allows attempt within 5 minute window', function () {

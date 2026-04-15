@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use BenBjurstrom\Otpz\Actions\GetUserFromEmail;
+use BenBjurstrom\Otpz\Mail\OtpzMail;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +35,7 @@ return [
     */
 
     'models' => [
-        'authenticatable' => App\Models\User::class,
+        'authenticatable' => User::class,
     ],
 
     /*
@@ -45,7 +49,7 @@ return [
     |
     */
 
-    'mailable' => BenBjurstrom\Otpz\Mail\OtpzMail::class,
+    'mailable' => OtpzMail::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -72,5 +76,5 @@ return [
     |
     */
 
-    'user_resolver' => BenBjurstrom\Otpz\Actions\GetUserFromEmail::class,
+    'user_resolver' => GetUserFromEmail::class,
 ];
