@@ -5,6 +5,7 @@ namespace BenBjurstrom\Otpz\Mail;
 use BenBjurstrom\Otpz\Models\Otp;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -28,7 +29,7 @@ class OtpzMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('otpz::otp.mail.otpz.subject') . config('app.name'),
+            subject: __('otpz::otp.mail.otpz.subject').config('app.name'),
         );
     }
 
@@ -56,7 +57,7 @@ class OtpzMail extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
