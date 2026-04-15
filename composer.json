@@ -18,20 +18,20 @@
     "require": {
         "php": "^8.2",
         "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0||^12.0"
+        "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0"
     },
     "require-dev": {
         "laravel/pint": "^1.21",
-        "nunomaduro/collision": "^8.5.0||^7.10.0",
-        "larastan/larastan": "^2.9.13",
-        "orchestra/testbench": "^9.10.0||^8.22.0",
-        "pestphp/pest": "^2.36",
-        "pestphp/pest-plugin-arch": "^2.7",
-        "pestphp/pest-plugin-laravel": "^2.4",
-        "phpstan/phpstan": "1.12.12",
-        "phpstan/extension-installer": "1.4.3",
-        "phpstan/phpstan-deprecation-rules": "1.2.1",
-        "phpstan/phpstan-phpunit": "1.4.1"
+        "nunomaduro/collision": "^7.10.0||^8.5.0",
+        "larastan/larastan": "^2.9.13||^3.0",
+        "orchestra/testbench": "^8.22.0||^9.10.0||^10.0||^11.0",
+        "pestphp/pest": "^2.36||^3.0||^4.0",
+        "pestphp/pest-plugin-arch": "^2.7||^3.0||^4.0",
+        "pestphp/pest-plugin-laravel": "^2.4||^3.0||^4.0",
+        "phpstan/phpstan": "^1.12.12||^2.0",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-deprecation-rules": "^1.2.1||^2.0",
+        "phpstan/phpstan-phpunit": "^1.4.1||^2.0"
     },
     "autoload": {
         "psr-4": {
